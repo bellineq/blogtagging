@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>MY's Annotation Tool</title>
+		<meta charset="utf-8" />
+		<meta http-equiv="Content-Type" content="text/html" />
+
+		<script src="http://code.jquery.com/jquery-latest.js"></script>
+		<script src="static/js/jquery.selection.js"></script>
+		<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+		<style>
+			word.selected {
+				background-color: #00ff00;
+			}
+		</style>
+	</head>
+	<body>
+		{% for line in article %}
+			<p>
+			<!--
+			{% for word in line %}
+				--><word id='{{ word[1] }}'>{{ word[0] }}</word><!--
+			{% endfor %}
+			-->
+			</p>
+		{% endfor %}
+
+		<p>
+			<input type="button" id="get-word" value="得到文字" />
+		</p>
+
+		<script>
+			$(document).ready(function() {
+				$('#get-word').click(function() {
+					$($.selection('html')).each(
+						(i, e) => $('word#'+e.id).addClass('selected')
+					);
+				});
+			});
+		</script>
+
+	</body>
+</html>
