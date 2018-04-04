@@ -12,9 +12,27 @@
 				border-right: 6px solid #ffffff;
 				cursor: pointer;
 			}
+			.button {
+			    padding: 16px 32px;
+			    text-align: center;
+			    text-decoration: none;
+			    display: inline-block;
+			    font-size: 16px;
+			    margin: 4px 2px;
+			    -webkit-transition-duration: 0.25s; /* Safari */
+			    transition-duration: 0.25s;
+			    cursor: pointer;
+			    background-color: white; 
+			    color: #4CAF50; 
+			    border: 2px solid #4CAF50;
+			}
+			.button:hover {
+			    background-color: #4CAF50;
+			    color: white;
+			}
 		</style>
 	</head>
-	<body>
+	<body style="padding-left: 50px; padding-right: 50px;">
 		{% for line in article %}
 			<p><!--
 				{% for word in line %}
@@ -23,9 +41,11 @@
 			--></p>
 		{% endfor %}
 
-		<p>
-			<input type="button" id="grep" value="標記" />
-			<input type="button" id="save" value="存檔" />
+		<p align="center">
+			<button class="button" id="grep">標記</button>
+			<button class="button" id="save">存檔</button>
+			<!-- <input type="button" id="grep" value="標記" /> -->
+			<!-- <input type="button" id="save" value="存檔" /> -->
 		</p>
 
 		<script src="http://code.jquery.com/jquery-latest.js"></script>
@@ -39,6 +59,7 @@
 					for ( m of $('mention').toArray() ) {
 						data[m.id] = m.score;
 					}
+					data = JSON.stringify(data)
 					jQuery.post('/save', data);
 				});
 
@@ -103,11 +124,6 @@
 						3: true,
 						4: true,
 						5: true,
-						6: true,
-						7: true,
-						8: true,
-						9: true,
-						10: true,
 						delete: true,
 						cancel: true
 					}
