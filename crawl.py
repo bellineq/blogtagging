@@ -1,4 +1,4 @@
-import requests, re, json
+import requests, re, json, string, random
 from bs4 import BeautifulSoup
 
 HTML_PARSER = "html.parser"
@@ -39,12 +39,19 @@ def parse_item_information(title, link, classname):
         content = re.sub("<.*?>", " ", str(content))
         content = content.replace('\n',';')
         content = content.replace('\xa0','')
-
-        content = [[(word, f'{l_id:01}-{w_id:01}',) \
-            for w_id, word in enumerate(line)] \
-                for l_id, line in enumerate(content.split(';'))]
-
-        contents.append({'title':title, 'link':link, 'content': content})
+        content_html = ''
+        for l_id, line in enumerate(content.split(';')):
+            content_html+='<p>'
+            for w_id, word in enumerate(line): content_html+='<word id="'+str(l_id)+'-'+str(w_id)+'">'+word+'</word>'
+            content_html+='</p>'
+        index = random.choice(string.ascii_letters)+link.rsplit('/', 1)[1]
+        contents.append({'id':index, 'title':title, 'link':link, 'content': content_html})
+        # content = [[(word, f'{l_id:01}-{w_id:01}',) \
+            # for w_id, word in enumerate(line)] \
+                # for l_id, line in enumerate(content.split(';'))]
+        # for line in content:
+            # for word in line:
+        # contents.append({'title':title, 'link':link, 'content': content})
 
 if __name__ == '__main__':
     # get_item_link_list()
@@ -58,7 +65,6 @@ if __name__ == '__main__':
     parse_item_information('OK Google 超方便的語音傳達指令', 'http://softwarecenter.pixnet.net/blog/post/65582269', 'article-content-inner')
     parse_item_information('Google 翻譯兩大功能 拍照翻譯、即時翻譯', 'http://softwarecenter.pixnet.net/blog/post/65465098', 'article-content-inner')
     parse_item_information('USB無線網路卡安裝教學', 'http://softwarecenter.pixnet.net/blog/post/66653616', 'article-content-inner')
-    # print(contents)
+    print(contents)
     # with open('makeup2.json','w') as f: json.dump(contents, f)
-    with open('data/3c_2.json','w') as f: json.dump(contents, f)
-    # with open('data/3c.json','w') as f: json.dump(contents, f)
+    with open('data/3c.json','w') as f: json.dump(contents, f)

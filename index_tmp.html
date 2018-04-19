@@ -12,26 +12,6 @@
 				border-right: 6px solid #ffffff;
 				cursor: pointer;
 			}
-            mention[score="1"] {
-                background-color: #cfeef3;
-                border-left: 6px solid #40bbcf;
-            }
-            mention[score="2"] {
-                background-color: #cae5cd;
-                border-left: 6px solid #60b36b;
-            }
-            mention[score="3"] {
-                background-color: #fbfdb1;
-                border-left: 6px solid #e5c500;
-            }
-            mention[score="4"] {
-                background-color: #fee3c4;
-                border-left: 6px solid #fca43d;
-            }
-            mention[score="5"] {
-                background-color: #f8bbc5;
-                border-left: 6px solid #ee6278;
-            }
 			.subjective {
 				background-color: #ffdddd;
 			}
@@ -62,7 +42,7 @@
 	</head>
 	<body style="padding-left: 50px; padding-right: 50px;" onkeydown="enterGrep()">
         <form class="" action="" method="get">
-            <select id="selectBox", name="index">
+            <select id="selectBox", name="pages">
     			{% for a in articleList %}
                     {% if a[0] == articleIndex %}
     			        <option value="{{a[0]}}" selected>{{a[1]}}</option>
@@ -72,8 +52,13 @@
     			{% endfor %}
     		</select>
         </form>
-        <!-- <div id="article-content" w3-include-html="/article/{{articleIndex}}"> -->
-        <div id="article-content"></div>
+		{% for line in article %}
+			<p><!--
+				{% for word in line %}
+					--><word id='{{ word[1] }}' />{{ word[0] }}</word><!--
+				{% endfor %}
+			--></p>
+		{% endfor %}
 
 		<p align="center">
 			<button class="button" id="grep" style="right: 15vh;">標記</button>
@@ -85,16 +70,13 @@
 
 		<script>
 			$(document).ready(function() {
-                includeHTML();
                 $('#selectBox').change(function() { this.form.submit(); });
-                $('mention').click(setMention);
 				$('#save').click(e => {
-					// var data = {};
-					// for ( m of $('mention').toArray() ) {
-					// 	data[$(m).attr('id')] = [$(m).attr('score'), $(m).attr('text')];
-					// }
-                    var data = document.getElementById('article-content').innerHTML;
-                    result = {index: "{{articleIndex}}", data: data};
+					var data = {};
+					for ( m of $('mention').toArray() ) {
+						data[$(m).attr('id')] = [$(m).attr('score'), $(m).attr('text')];
+					}
+                    result = {title: "{{articleName}}", link: "{{articleList}}", tags: data};
 
 					$.ajax({
 					    type: 'POST',
@@ -162,16 +144,10 @@
 				});
 			});
 
-            function includeHTML() {
-                var content = '{{article}}';
-                $('#article-content').html($('<div />').html(content).text());
-            };
-
             function enterGrep() {
                 if (event.keyCode == 13) {$('#grep').trigger('click')};
             }
 			function setMention() {
-                console.log('hi');
 				swal({
 					title: 'I am a mention!',
 					text:
