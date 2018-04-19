@@ -12,6 +12,12 @@
 				border-right: 6px solid #ffffff;
 				cursor: pointer;
 			}
+			.subjective {
+				background-color: #ffdddd;
+			}
+			.objective {
+				background-color: #66cdaa;
+			}
 			.button {
 			    padding: 16px 32px;
 			    text-align: center;
@@ -22,9 +28,11 @@
 			    -webkit-transition-duration: 0.25s; /* Safari */
 			    transition-duration: 0.25s;
 			    cursor: pointer;
-			    background-color: white; 
-			    color: #4CAF50; 
+			    background-color: white;
+			    color: #4CAF50;
 			    border: 2px solid #4CAF50;
+			    position: fixed;
+			    bottom: 0px;
 			}
 			.button:hover {
 			    background-color: #4CAF50;
@@ -32,7 +40,18 @@
 			}
 		</style>
 	</head>
-	<body style="padding-left: 50px; padding-right: 50px;">
+	<body style="padding-left: 50px; padding-right: 50px;" onkeydown="enterGrep()">
+        <form class="" action="" method="get">
+            <select id="selectBox", name="pages">
+    			{% for a in articleList %}
+                    {% if a[0] == articleIndex %}
+    			        <option value="{{a[0]}}" selected>{{a[1]}}</option>
+                    {% else %}
+    			        <option value="{{a[0]}}">{{a[1]}}</option>
+                    {% endif %}
+    			{% endfor %}
+    		</select>
+        </form>
 		{% for line in article %}
 			<p><!--
 				{% for word in line %}
@@ -42,10 +61,8 @@
 		{% endfor %}
 
 		<p align="center">
-			<button class="button" id="grep">標記</button>
-			<button class="button" id="save">存檔</button>
-			<!-- <input type="button" id="grep" value="標記" /> -->
-			<!-- <input type="button" id="save" value="存檔" /> -->
+			<button class="button" id="grep" style="right: 15vh;">標記</button>
+			<button class="button" id="save" style="right: 5px;">存檔</button>
 		</p>
 
 		<script src="http://code.jquery.com/jquery-latest.js"></script>
@@ -53,18 +70,33 @@
 
 		<script>
 			$(document).ready(function() {
-
+                $('#selectBox').change(function() { this.form.submit(); });
 				$('#save').click(e => {
 					var data = {};
 					for ( m of $('mention').toArray() ) {
-						data[m.id] = m.score;
+						data[$(m).attr('id')] = [$(m).attr('score'), $(m).attr('text')];
 					}
-					data = JSON.stringify(data)
-					jQuery.post('/save', data);
+                    result = {title: "{{articleName}}", link: "{{articleList}}", tags: data};
+
+					$.ajax({
+					    type: 'POST',
+					    contentType: 'application/json',
+					    data: JSON.stringify(result),
+					    dataType: 'json',
+					    url: '/save',
+					    success: function (e) {
+					        console.log(e);
+					    }
+					});
+					swal({
+						title: 'Save!',
+						text: '大大辛苦了 >////<',
+						content: "",
+					});
 				});
 
 				$('#grep').click(e => {
-					var sel = window.getSelection();
+					sel = window.getSelection();
 
 					if ( (!sel.anchorNode || !sel.focusNode) || (sel.anchorNode == sel.focusNode && sel.anchorOffset == sel.focusOffset) ) {
 						swal('No selection!', '', 'error');
@@ -100,7 +132,9 @@
 
 					var mention = document.createElement("mention");
 					mention.id = e0.id+'@'+e1.id;
-					mention.score = 0;
+
+                    $(mention).attr('score', 0);
+                    $(mention).attr('text', sel);
 					$(mention).append(contents);
 					range.deleteContents();
 					range.insertNode(mention);
@@ -110,21 +144,25 @@
 				});
 			});
 
+            function enterGrep() {
+                if (event.keyCode == 13) {$('#grep').trigger('click')};
+            }
 			function setMention() {
 				swal({
 					title: 'I am a mention!',
 					text:
-							'id='+this.id+'\n'+
-							'score='+this.score+'\n',
-					content: "input",
+							'id='+$(this).attr('id')+'\n'+
+							'score='+$(this).attr('score')+'\n'+
+                            'text='+$(this).attr('text')+'\n',
 					buttons: {
-						0: true,
-						1: true,
-						2: true,
-						3: true,
-						4: true,
-						5: true,
-						delete: true,
+						// subjective: true,
+						// objective: true,
+                        1: true,
+                        2: true,
+                        3: true,
+                        4: true,
+                        5: true,
+                        delete: true,
 						cancel: true
 					}
 				}).then(score => {
@@ -133,7 +171,7 @@
 						case 'delete':
 							$(this).replaceWith($(this).children());
 						default:
-							this.score = score;
+							$(this).attr('score', score);
 					}
 				});
 				$('button.swal-button--delete').parent().before('<hr>')
