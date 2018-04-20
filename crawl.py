@@ -65,6 +65,6 @@ if __name__ == '__main__':
 #   parse_item_information('OK Google 超方便的語音傳達指令', 'http://softwarecenter.pixnet.net/blog/post/65582269', 'article-content-inner')
 #   parse_item_information('Google 翻譯兩大功能 拍照翻譯、即時翻譯', 'http://softwarecenter.pixnet.net/blog/post/65465098', 'article-content-inner')
 #   parse_item_information('USB無線網路卡安裝教學', 'http://softwarecenter.pixnet.net/blog/post/66653616', 'article-content-inner')
-    print(contents)
+# print(contents)
     with open('data/makeup.json','w') as f: json.dump(contents, f)
 # with open('data/3c.json','w') as f: json.dump(contents, f)
