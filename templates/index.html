@@ -166,7 +166,10 @@
             };
 
             function enterGrep() {
-                if (event.keyCode == 13) {$('#grep').trigger('click')};
+                if (event.keyCode == 13) {
+					$('#grep').trigger('click');
+					event.preventDefault();
+				};
             }
 			function setMention() {
                 console.log('hi');
