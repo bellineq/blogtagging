@@ -86,13 +86,11 @@
 		<script>
 			$(document).ready(function() {
                 includeHTML();
-                $('#selectBox').change(function() { this.form.submit(); });
+                $('#selectBox').change(function() {
+                    this.form.submit();
+                });
                 $('mention').click(setMention);
 				$('#save').click(e => {
-					// var data = {};
-					// for ( m of $('mention').toArray() ) {
-					// 	data[$(m).attr('id')] = [$(m).attr('score'), $(m).attr('text')];
-					// }
                     var data = document.getElementById('article-content').innerHTML;
                     result = {index: "{{articleIndex}}", data: data};
 

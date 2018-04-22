@@ -9,20 +9,26 @@ from flask import request
 import json
 
 app = Flask(__name__)
-json_file = 'data/3c.json'
+# json_file = 'data/3c.json'
+json_file = 'data/makeup.json'
 articleList = []
+with open(json_file, 'r') as f:
+    articles = json.load(f)
+    for a in articles: articleList.append([a['id'], a['title']])
 
 @app.route('/', methods=['GET', 'POST'])
 def main():
     with open(json_file, 'r') as f: articles = json.load(f)
-    for a in articles: articleList.append([a['id'], a['title']])
     index = request.args.get('index')
-    if not index: index = 'l206396230'
+    print('index:', index)
+    # if not index: index = 'l206396230'  # 3c
+    if not index: index = 'v221808882'  # makeup
     for a in articles:
         if a['id']==index:
             articleName = a['title']
             articleLink = a['link']
             content = a['content']
+            break
     return render_template('index.html', article=content, articleIndex=index, articleName=articleName, articleLink=articleLink, articleList=articleList)
 
 @app.route('/save', methods=['POST'])
