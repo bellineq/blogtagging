@@ -9,8 +9,8 @@ from flask import request
 import json
 
 app = Flask(__name__)
-# json_file = 'data/3c.json'
-json_file = 'data/makeup.json'
+json_file = 'data/3c.json'
+#json_file = 'data/makeup.json'
 articleList = []
 with open(json_file, 'r') as f:
     articles = json.load(f)
@@ -21,8 +21,8 @@ def main():
     with open(json_file, 'r') as f: articles = json.load(f)
     index = request.args.get('index')
     print('index:', index)
-    # if not index: index = 'l206396230'  # 3c
-    if not index: index = 'v221808882'  # makeup
+    if not index: index = 'l206396230'  # 3c
+#if not index: index = 'v221808882'  # makeup
     for a in articles:
         if a['id']==index:
             articleName = a['title']
