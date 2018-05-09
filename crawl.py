@@ -39,6 +39,7 @@ def parse_item_information(title, link, classname):
         content = re.sub("<.*?>", " ", str(content))
         content = content.replace('\n',';')
         content = content.replace('\xa0','')
+        content = content.replace('\r',';')
         content_html = ''
         for l_id, line in enumerate(content.split(';')):
             content_html+='<p>'
