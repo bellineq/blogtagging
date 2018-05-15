@@ -21,7 +21,7 @@ def main():
 
 @app.route('/tech', methods=['GET', 'POST'])
 def tech():
-    json_file = 'data/3c.json'
+    json_file = 'data/tech.json'
     articleList = []
     with open(json_file, 'r') as f: 
         articles = json.load(f)
@@ -64,7 +64,7 @@ def save():
     try:
         content = request.get_json()
         if content['articleType'] == 'tech':
-            json_file = 'data/3c.json'
+            json_file = 'data/tech.json'
         elif content['articleType'] == 'makeup':
             json_file = 'data/makeup.json'
         with open(json_file, 'r') as f: data = json.load(f)
