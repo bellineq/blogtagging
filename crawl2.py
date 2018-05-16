@@ -4,17 +4,17 @@ from bs4 import BeautifulSoup
 HTML_PARSER = "html.parser"
 ROOT_URL = 'https://styleme.pixnet.net'                 
 # LIST_URL = 'https://www.pixnet.net/blog/articles/category/19/hot/'        # movie
-LIST_URL = 'https://www.pixnet.net/blog/articles/group/3/hot/'        # movie
+LIST_URL = 'https://www.pixnet.net/blog/articles/group/3/hot/'        # food
 
 contents = [] 
 
 def get_item_link_list():
-    list_url = LIST_URL
-    for i in range(1):
+    for i in range(5):
+        list_url = LIST_URL
         list_url = list_url + str(i+1)
-        print(list_url)
+        print('URL :', list_url, '\n')
         list_req = requests.get(list_url)
-        print(list_req)
+        print('Status : ', list_req, '\n')
         if list_req.status_code == requests.codes.ok:
             soup = BeautifulSoup(list_req.content, HTML_PARSER)
             if i == 0:
@@ -25,7 +25,7 @@ def get_item_link_list():
 
             links = []
             for doc in articles:
-                print('doc: ', doc ,'\n')
+                # print('doc: ', doc ,'\n')
                 link = doc.find('a')['href'].split('-')[0]
                 print('link: ', link, '\n')
                 title = doc.find('h3').find('a', attrs={'target': '_blank'}).string
@@ -54,14 +54,8 @@ def parse_item_information(title, link, classname):
             content_html+='</p>'
         index = random.choice(string.ascii_letters)+link.rsplit('/', 1)[1]
         contents.append({'id':index, 'title':title, 'link':link, 'content': content_html})
-        # content = [[(word, f'{l_id:01}-{w_id:01}',) \
-            # for w_id, word in enumerate(line)] \
-                # for l_id, line in enumerate(content.split(';'))]
-        # for line in content:
-            # for word in line:
-        # contents.append({'title':title, 'link':link, 'content': content})
 
 if __name__ == '__main__':
     get_item_link_list()
-    with open('data/food.json','w') as f: json.dump(contents, f)
     # with open('data/movie.json','w') as f: json.dump(contents, f)
+    with open('data/food.json','w') as f: json.dump(contents, f)
