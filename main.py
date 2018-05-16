@@ -5,10 +5,14 @@ from flask import Flask
 from flask import jsonify
 from flask import render_template
 from flask import request
+from flask import send_from_directory
 
-import json
+import json, os
+
+UPLOAD_FOLDER = 'fig'
 
 app = Flask(__name__)
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 # json_file = 'data/3c.json'
 # json_file = 'data/makeup.json'
 # with open(json_file, 'r') as f:
@@ -17,7 +21,14 @@ app = Flask(__name__)
 
 @app.route('/', methods=['GET', 'POST'])
 def main():
-    return render_template('home.html')
+    procedure = os.path.join(app.config['UPLOAD_FOLDER'], 'procedure.png')
+    standard = os.path.join(app.config['UPLOAD_FOLDER'], 'standard.png')
+    return render_template('home.html', procedure = procedure, standard = standard)
+
+@app.route('/fig/<filename>')
+def uploaded_file(filename):
+    return send_from_directory(app.config['UPLOAD_FOLDER'],filename)
+
 
 @app.route('/tech', methods=['GET', 'POST'])
 def tech():
