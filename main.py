@@ -67,7 +67,7 @@ def movie():
         for a in articles: articleList.append([a['id'], a['title']])
     index = request.args.get('index')
     print('index:', index)
-    if not index: index = 'R221685189' 
+    if not index: index = 'D221685189'  # movie
     articleType = 'movie'
     for a in articles:
         if a['id']==index:
@@ -87,7 +87,7 @@ def food():
         for a in articles: articleList.append([a['id'], a['title']])
     index = request.args.get('index')
     print('index:', index)
-    if not index: index = 'y463064060' 
+    if not index: index = 'y463064060' # food
     articleType = 'food'
     for a in articles:
         if a['id']==index:
