@@ -78,6 +78,26 @@ def movie():
     return render_template('index.html', article=content, articleIndex=index, articleName=articleName, 
     articleLink=articleLink, articleList=articleList, articleType = articleType)
 
+@app.route('/food', methods=['GET', 'POST'])
+def food():
+    json_file = 'data/food.json'
+    articleList = []
+    with open(json_file, 'r') as f: 
+        articles = json.load(f)
+        for a in articles: articleList.append([a['id'], a['title']])
+    index = request.args.get('index')
+    print('index:', index)
+    if not index: index = 'E463064060' 
+    articleType = 'food'
+    for a in articles:
+        if a['id']==index:
+            articleName = a['title']
+            articleLink = a['link']
+            content = a['content']
+            break
+    return render_template('index.html', article=content, articleIndex=index, articleName=articleName, 
+    articleLink=articleLink, articleList=articleList, articleType = articleType)
+
 @app.route('/save', methods=['POST'])
 def save():
     try:
@@ -88,6 +108,8 @@ def save():
             json_file = 'data/makeup.json'
         elif content['articleType'] == 'movie':
             json_file = 'data/movie.json'
+        elif content['articleType'] == 'food':
+            json_file = 'data/food.json'
 
         with open(json_file, 'r') as f: data = json.load(f)
         for d in data:

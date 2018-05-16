@@ -3,7 +3,8 @@ from bs4 import BeautifulSoup
 
 HTML_PARSER = "html.parser"
 ROOT_URL = 'https://styleme.pixnet.net'                 
-LIST_URL = 'https://www.pixnet.net/blog/articles/category/19/hot/'        # movie
+# LIST_URL = 'https://www.pixnet.net/blog/articles/category/19/hot/'        # movie
+LIST_URL = 'https://www.pixnet.net/blog/articles/group/3/hot/'        # movie
 
 contents = [] 
 
@@ -33,7 +34,6 @@ def get_item_link_list():
                     'title': title,
                     'href': link
                 })
-                # parse_item_information(title, link, 'post__article')    # makeup
                 parse_item_information(title, link, 'article-content-inner')
 
 
@@ -63,4 +63,5 @@ def parse_item_information(title, link, classname):
 
 if __name__ == '__main__':
     get_item_link_list()
-    with open('data/movie.json','w') as f: json.dump(contents, f)
+    with open('data/food.json','w') as f: json.dump(contents, f)
+    # with open('data/movie.json','w') as f: json.dump(contents, f)
