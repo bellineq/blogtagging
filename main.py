@@ -58,6 +58,25 @@ def makeup():
     return render_template('index.html', article=content, articleIndex=index, articleName=articleName, 
     articleLink=articleLink, articleList=articleList, articleType = articleType)
 
+@app.route('/movie', methods=['GET', 'POST'])
+def movie():
+    json_file = 'data/movie.json'
+    articleList = []
+    with open(json_file, 'r') as f: 
+        articles = json.load(f)
+        for a in articles: articleList.append([a['id'], a['title']])
+    index = request.args.get('index')
+    print('index:', index)
+    if not index: index = 'R221685189' 
+    articleType = 'movie'
+    for a in articles:
+        if a['id']==index:
+            articleName = a['title']
+            articleLink = a['link']
+            content = a['content']
+            break
+    return render_template('index.html', article=content, articleIndex=index, articleName=articleName, 
+    articleLink=articleLink, articleList=articleList, articleType = articleType)
 
 @app.route('/save', methods=['POST'])
 def save():
