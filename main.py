@@ -86,6 +86,9 @@ def save():
             json_file = 'data/tech.json'
         elif content['articleType'] == 'makeup':
             json_file = 'data/makeup.json'
+        elif content['articleType'] == 'movie':
+            json_file = 'data/movie.json'
+
         with open(json_file, 'r') as f: data = json.load(f)
         for d in data:
             if d['id']==content['index']: d['content']=content['data']
