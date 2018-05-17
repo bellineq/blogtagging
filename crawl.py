@@ -3,16 +3,29 @@ from bs4 import BeautifulSoup
 
 HTML_PARSER = "html.parser"
 ROOT_URL = 'https://styleme.pixnet.net' 
+TECH_URL = 'https://www.pixnet.net/blog/articles/category/24/hot/'        # tech
+MAKEUP_URL = 'https://www.pixnet.net/blog/articles/category/23/hot/'        # makeup                
+MOVIE_URL = 'https://www.pixnet.net/blog/articles/category/19/hot/'        # movie
+FOOD_URL = 'https://www.pixnet.net/blog/articles/group/3/hot/'        # food
+
 # LIST_URL = 'https://www.pixnet.net/blog/articles/category/24/hot/'        # tech
 # LIST_URL = 'https://www.pixnet.net/blog/articles/category/23/hot/'        # makeup                
 # LIST_URL = 'https://www.pixnet.net/blog/articles/category/19/hot/'        # movie
-LIST_URL = 'https://www.pixnet.net/blog/articles/group/3/hot/'        # food
+# LIST_URL = 'https://www.pixnet.net/blog/articles/group/3/hot/'        # food
 
 contents = [] 
 
-def get_item_link_list():
+def get_item_link_list(type):
     for i in range(5):
-        list_url = LIST_URL
+        if type == 'tech':
+            list_url = TECH_URL
+        elif type == 'makeup':
+            list_url = MAKEUP_URL            
+        elif type == 'movie':
+            list_url = MOVIE_URL   
+        elif type == 'food':
+            list_url = FOOD_URL
+
         list_url = list_url + str(i+1)
         print('URL :', list_url, '\n')
         list_req = requests.get(list_url)
@@ -58,9 +71,32 @@ def parse_item_information(title, link, classname):
         index = random.choice(string.ascii_letters)+link.rsplit('/', 1)[1]
         contents.append({'id':index, 'title':title, 'link':link, 'content': content_html})
 
+def Binder(type):
+    get_item_link_list(type)
+    if type == 'tech':
+        with open('data/tech.json','w') as f: json.dump(contents, f)
+        with open('data/tech_w.json','w') as f: json.dump(contents, f)
+        with open('data/tech_s.json','w') as f: json.dump(contents, f)
+    elif type == 'makeup':
+        with open('data/makeup.json','w') as f: json.dump(contents, f)
+        with open('data/makeup_w.json','w') as f: json.dump(contents, f)
+        with open('data/makeup_s.json','w') as f: json.dump(contents, f)        
+    elif type == 'movie':
+        with open('data/movie.json','w') as f: json.dump(contents, f)
+        with open('data/movie_w.json','w') as f: json.dump(contents, f)
+        with open('data/movie_s.json','w') as f: json.dump(contents, f) 
+    elif type == 'food':
+        with open('data/food.json','w') as f: json.dump(contents, f)
+        with open('data/food_w.json','w') as f: json.dump(contents, f)
+        with open('data/food_s.json','w') as f: json.dump(contents, f)
+    
+
 if __name__ == '__main__':
-    get_item_link_list()
+    ## type: tech; makeup; movie; food
+    Binder('food')
+
+    # get_item_link_list('movie')
     # with open('data/tech.json','w') as f: json.dump(contents, f)
     # with open('data/makeup.json','w') as f: json.dump(contents, f)
     # with open('data/movie.json','w') as f: json.dump(contents, f)
-    with open('data/food.json','w') as f: json.dump(contents, f)
+    # with open('data/food.json','w') as f: json.dump(contents, f)
