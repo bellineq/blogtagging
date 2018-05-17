@@ -95,22 +95,22 @@
 						{% endfor %}
 					</div>
 				</li>
-				<span class="navbar-text mr-sm-2" style="color: #191970; padding-left: 20px">
+				<!-- <span class="navbar-text mr-sm-2" style="color: #191970; padding-left: 20px">
 					{% for i in articleList %}
 						{% if articleIndex ==  i[0] %}
 							<b>{{i[1]}}</b>
 						{% endif %}
 					{% endfor %}
-				</span>
+				</span> -->
 			</div>
-			<div class="btn-group btn-group-toggle" data-toggle="buttons">
+			<!-- <div class="btn-group btn-group-toggle" data-toggle="buttons">
 				<label class="btn btn-secondary active">
 				  <input type="radio" name="word" id="word" autocomplete="off" checked> 文字
 				</label>
 				<label class="btn btn-secondary">
 				  <input type="radio" name="sentence" id="sentence" autocomplete="off"> 語句
 				</label>
-			</div>
+			</div> -->
 		</nav>
 
 
@@ -128,7 +128,49 @@
 		</form> -->
 
         <!-- <div id="article-content" w3-include-html="/article/{{articleIndex}}"> -->
-		<div style="padding-left: 50px; padding-right: 50px; padding-top: 30px" id="article-content"></div>
+		<!-- <div style="padding-left: 50px; padding-right: 50px; padding-top: 30px" id="article-content"></div> -->
+		
+		<div class="row " style ='padding-left: 1%; padding-top: 1%; padding-right: 1%'>
+			<div class="col-sm-6">
+			  <div class="card bg-light">
+				<div class="card-header">
+					<h5>
+						文字
+					</h5>
+				</div>
+				<div class="card-body">
+					<h5 class="card-title" style ='padding-top: 1%;'>
+						{% for i in articleList %}
+							{% if articleIndex ==  i[0] %}
+								<b>{{i[1]}}</b>
+							{% endif %}
+						{% endfor %}
+					</h5>
+				  <p class="card-text" style ='padding-top: 1%;' id="article-content_w"></p>
+				</div>
+			  </div>
+			</div>
+			<div class="col-sm-6">
+			  <div class="card bg-light">
+				<div class="card-header">
+						<h5>
+							語句
+						</h5>
+				</div>
+				<div class="card-body">
+				  <h5 class="card-title" style ='padding-top: 1%;'>
+					{% for i in articleList %}
+						{% if articleIndex ==  i[0] %}
+							<b>{{i[1]}}</b>
+						{% endif %}
+					{% endfor %}
+				  </h5>
+				  <p class="card-text" style ='padding-top: 1%;' id="article-content_s"></p>
+				</div>
+			  </div>
+			</div>
+		</div>
+
 		<p align="center">
 			<button class="button" id="grep" style="right: 15vh;">標記</button>
 			<button class="button" id="save" style="right: 5px;">存檔</button>
@@ -148,8 +190,9 @@
                 // });
                 $('mention').click(setMention);
 				$('#save').click(e => {
-                    var data = document.getElementById('article-content').innerHTML;
-                    result = {index: "{{articleIndex}}", articleType: "{{articleType}}", data: data};
+                    var data_s = document.getElementById('article-content_s').innerHTML;
+					var data_w = document.getElementById('article-content_w').innerHTML;
+                    result = {index: "{{articleIndex}}", articleType: "{{articleType}}", data_s: data_s, data_w: data_w};
 
 					$.ajax({
 					    type: 'POST',
@@ -167,6 +210,26 @@
 						content: "",
 					});
 				});
+				// $('#save').click(e => {
+                //     var data = document.getElementById('article-content').innerHTML;
+                //     result = {index: "{{articleIndex}}", articleType: "{{articleType}}", data: data};
+
+				// 	$.ajax({
+				// 	    type: 'POST',
+				// 	    contentType: 'application/json',
+				// 	    data: JSON.stringify(result),
+				// 		dataType: 'json',
+				// 	    url: '/save',
+				// 	    success: function (e) {
+				// 	        console.log(e);
+				// 	    }
+				// 	});
+				// 	swal({
+				// 		title: 'Save!',
+				// 		text: '大大辛苦了 >////<',
+				// 		content: "",
+				// 	});
+				// });
 
 				$('#grep').click(e => {
 					sel = window.getSelection();
@@ -217,9 +280,17 @@
 				});
 			});
 
+            // function includeHTML() {
+            //     var content = '{{article}}';
+            //     $('#article-content').html($('<div />').html(content).text());
+            //     $('#article-content2').html($('<div />').html(content).text());
+            // };
+
             function includeHTML() {
-                var content = '{{article}}';
-                $('#article-content').html($('<div />').html(content).text());
+                var content_s = '{{article_s}}';
+                var content_w = '{{article_w}}';
+                $('#article-content_s').html($('<div />').html(content_s).text());
+                $('#article-content_w').html($('<div />').html(content_w).text());
             };
 
             function enterGrep() {
