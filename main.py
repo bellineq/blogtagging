@@ -92,10 +92,10 @@ def save():
             if d['id']==content['index']: d['content']=content['data_s']
         with open(json_file, 'w') as f: json.dump(data, f)
         f.close()
-        
+
         return jsonify(message='')
     except Exception as e:
-        print(f'"/save" failed: {e}')
+        # print(f'"/save" failed: {e}')
         return jsonify(message=str(e)), 500
 
 if __name__ == '__main__':
