@@ -38,7 +38,7 @@ def tech():
         articles = json.load(f)
         for a in articles: articleList.append([a['id'], a['title']])
     index = request.args.get('index')
-    if not index: index = 'l206396230'  # 3c
+    if not index: index = 'S329768706'  # tech
     articleType = 'tech'
     for a in articles:
         if a['id']==index:
@@ -58,7 +58,7 @@ def makeup():
         for a in articles: articleList.append([a['id'], a['title']])
     index = request.args.get('index')
     print('index:', index)
-    if not index: index = 'v221808882'  # makeup
+    if not index: index = 'q463067765'  # makeup
     articleType = 'makeup'
     for a in articles:
         if a['id']==index:
@@ -78,7 +78,7 @@ def movie():
         for a in articles: articleList.append([a['id'], a['title']])
     index = request.args.get('index')
     print('index:', index)
-    if not index: index = 'D221685189'  # movie
+    if not index: index = 'H175859823'  # movie
     articleType = 'movie'
     for a in articles:
         if a['id']==index:
@@ -98,7 +98,7 @@ def food():
         for a in articles: articleList.append([a['id'], a['title']])
     index = request.args.get('index')
     print('index:', index)
-    if not index: index = 'y463064060' # food
+    if not index: index = 'j66802947' # food
     articleType = 'food'
     for a in articles:
         if a['id']==index:
