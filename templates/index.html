@@ -95,13 +95,21 @@
 						{% endfor %}
 					</div>
 				</li>
-				<span class="navbar-text mr-sm-2" style="color: #191970;">
+				<span class="navbar-text mr-sm-2" style="color: #191970; padding-left: 20px">
 					{% for i in articleList %}
 						{% if articleIndex ==  i[0] %}
 							<b>{{i[1]}}</b>
 						{% endif %}
 					{% endfor %}
 				</span>
+			</div>
+			<div class="btn-group btn-group-toggle" data-toggle="buttons">
+				<label class="btn btn-secondary active">
+				  <input type="radio" name="word" id="word" autocomplete="off" checked> 文字
+				</label>
+				<label class="btn btn-secondary">
+				  <input type="radio" name="sentence" id="sentence" autocomplete="off"> 語句
+				</label>
 			</div>
 		</nav>
 
