@@ -6,29 +6,20 @@ from flask import jsonify
 from flask import render_template
 from flask import request
 from flask import send_from_directory
+from flask import url_for
 
 import json, os
 
-UPLOAD_FOLDER = 'fig'
-
 app = Flask(__name__)
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 @app.route('/', methods=['GET', 'POST'])
 def main():
-    procedure = os.path.join(app.config['UPLOAD_FOLDER'], 'procedure.png')
-    standard = os.path.join(app.config['UPLOAD_FOLDER'], 'standard.png')
-    return render_template('home.html', procedure = procedure, standard = standard)
-
-@app.route('/fig/<filename>')
-def uploaded_file(filename):
-    return send_from_directory(app.config['UPLOAD_FOLDER'],filename)
+    return render_template('home.html')
 
 @app.route('/<category>', methods=['GET', 'POST'])
 def category(category):
 
     json_file = os.path.join('data', str(category)+'.json')
-    print(os.path.join('data', str(category)+'.json'))
     articleList = []
     with open(json_file, 'r') as f: 
         articles = json.load(f)
