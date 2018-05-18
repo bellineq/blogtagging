@@ -8,15 +8,16 @@ MAKEUP_URL = 'https://www.pixnet.net/blog/articles/category/23/hot/'        # ma
 MOVIE_URL = 'https://www.pixnet.net/blog/articles/category/19/hot/'        # movie
 FOOD_URL = 'https://www.pixnet.net/blog/articles/group/3/hot/'        # food
 
-# LIST_URL = 'https://www.pixnet.net/blog/articles/category/24/hot/'        # tech
-# LIST_URL = 'https://www.pixnet.net/blog/articles/category/23/hot/'        # makeup                
-# LIST_URL = 'https://www.pixnet.net/blog/articles/category/19/hot/'        # movie
-# LIST_URL = 'https://www.pixnet.net/blog/articles/group/3/hot/'        # food
-
-contents = [] 
+contents = []
+article_count = 0
 
 def get_item_link_list(type):
-    for i in range(5):
+    global article_count
+    global contents
+    article_count = 0
+    contents.clear()
+    links = [] 
+    for i in range(10):
         if type == 'tech':
             list_url = TECH_URL
         elif type == 'makeup':
@@ -27,9 +28,10 @@ def get_item_link_list(type):
             list_url = FOOD_URL
 
         list_url = list_url + str(i+1)
-        print('URL :', list_url, '\n')
         list_req = requests.get(list_url)
+        print('URL :', list_url, '\n')
         print('Status : ', list_req, '\n')
+        
         if list_req.status_code == requests.codes.ok:
             soup = BeautifulSoup(list_req.content, HTML_PARSER)
             if i == 0:
@@ -37,20 +39,24 @@ def get_item_link_list(type):
                 articles.extend(soup.find('ol', attrs={'class' : 'article-list'}).find_all('li', attrs={'class' : re.compile("^rank")}))
             else:
                 articles = soup.find('ol', attrs={'class' : 'article-list'}).find_all('li', attrs={'class' : re.compile("^rank")}) 
-
-            links = []
             for doc in articles:
-                # print('doc: ', doc ,'\n')
                 link = doc.find('a')['href']
                 link = link.split('post')[0]+'post'+link.split('post')[-1].split('-')[0]
-                print('link: ', link, '\n')
                 title = doc.find('h3').find('a', attrs={'target': '_blank'}).string
+
                 print('title: ', title , '\n')
-                links.append({
-                    'title': title,
-                    'href': link
-                })
-                parse_item_information(title, link, 'article-content-inner')
+                print('link: ', link, '\n')
+                # print('doc: ', doc ,'\n')
+
+                if not any(i['title'] == title for i in links):
+                    parse_item_information(title, link, 'article-content-inner')
+                    links.append({
+                        'title': title,
+                        'href': link
+                    })
+                if article_count >= 100:
+                    return True
+
 
 
 def parse_item_information(title, link, classname):
@@ -64,39 +70,36 @@ def parse_item_information(title, link, classname):
         content = content.replace('\xa0','')
         content = content.replace('\r',';')
         content_html = ''
+        word_count = 0
+        global article_count
         for l_id, line in enumerate(content.split(';')):
             content_html+='<p>'
-            for w_id, word in enumerate(line): content_html+='<word id="'+str(l_id)+'-'+str(w_id)+'">'+word+'</word>'
+            for w_id, word in enumerate(line): 
+                content_html+='<word id="'+str(l_id)+'-'+str(w_id)+'">'+word+'</word>'
+                word_count += 1
             content_html+='</p>'
-        index = random.choice(string.ascii_letters)+link.rsplit('/', 1)[1]
-        contents.append({'id':index, 'title':title, 'link':link, 'content': content_html})
+        if word_count >= 500 and word_count <= 3000:
+            index = random.choice(string.ascii_letters)+link.rsplit('/', 1)[1]
+            contents.append({'id':index, 'title':title, 'link':link, 'number': article_count, 'item_name':'', 'item_store':'', 
+            'content_s':content_html, 'content_w':content_html})
+            article_count += 1
 
-def Binder(type):
+def crawler(type):
     get_item_link_list(type)
+    print('complete, total', article_count, ' docs get!\n')
     if type == 'tech':
         with open('data/tech.json','w') as f: json.dump(contents, f)
-        with open('data/tech_w.json','w') as f: json.dump(contents, f)
-        with open('data/tech_s.json','w') as f: json.dump(contents, f)
     elif type == 'makeup':
-        with open('data/makeup.json','w') as f: json.dump(contents, f)
-        with open('data/makeup_w.json','w') as f: json.dump(contents, f)
-        with open('data/makeup_s.json','w') as f: json.dump(contents, f)        
+        with open('data/makeup.json','w') as f: json.dump(contents, f)      
     elif type == 'movie':
         with open('data/movie.json','w') as f: json.dump(contents, f)
-        with open('data/movie_w.json','w') as f: json.dump(contents, f)
-        with open('data/movie_s.json','w') as f: json.dump(contents, f) 
     elif type == 'food':
         with open('data/food.json','w') as f: json.dump(contents, f)
-        with open('data/food_w.json','w') as f: json.dump(contents, f)
-        with open('data/food_s.json','w') as f: json.dump(contents, f)
     
 
 if __name__ == '__main__':
     ## type: tech; makeup; movie; food
-    Binder('food')
-
-    # get_item_link_list('movie')
-    # with open('data/tech.json','w') as f: json.dump(contents, f)
-    # with open('data/makeup.json','w') as f: json.dump(contents, f)
-    # with open('data/movie.json','w') as f: json.dump(contents, f)
-    # with open('data/food.json','w') as f: json.dump(contents, f)
+    crawler('tech')
+    # crawler('makeup')
+    # crawler('movie')
+    # crawler('food')
