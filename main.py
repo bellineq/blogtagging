@@ -56,8 +56,10 @@ def save():
         with open(json_file, 'r') as f: data = json.load(f)
         for d in data:
             if d['id']==content['index']: 
-                d['content_w']=content['data_w']
-                d['content_s']=content['data_s']
+                d['content_w'] = content['data_w']
+                d['content_s'] = content['data_s']
+                d['item_name'] = content['item_name']
+                d['item_store'] = content['item_store']
         with open(json_file, 'w') as f: json.dump(data, f)
         f.close()
         return jsonify(message='')

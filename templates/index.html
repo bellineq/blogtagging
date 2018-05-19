@@ -91,20 +91,24 @@
 								<label for='itemName'  class="col-sm-1 col-form-label">
 									商品
 								</label>
-								<div class="col-md-10" id='itemName'>
+								<div class="col-md-10">
 									{% if not item_name %}
-										<input type="text" class="form-control" placeholder="請填商品名稱">
+										<input type="text" id='itemName' class="form-control" placeholder="請填商品名稱">
 									{% else %}
-										<input type="text" class="form-control" value ="{{item_name}}">
+										<input type="text" id='itemName' class="form-control" value ="{{item_name}}">
 									{% endif %}
 								</div>
 							</div>
 							<div class="form-group row" >
-								<label for='itemName'  class="col-sm-1 col-form-label">
+								<label for='itemStore'  class="col-sm-1 col-form-label">
 									商家
 								</label>
-								<div class="col-md-10" id='itemName'>
-									<input type="text" class="form-control" placeholder="請填商家名稱">
+								<div class="col-md-10">
+									{% if not item_store %}
+										<input type="text" id='itemStore' class="form-control" placeholder="請填商家名稱">
+									{% else %}
+										<input type="text" id='itemStore' class="form-control" value ="{{item_store}}">
+									{% endif %}								
 								</div>
 							</div>
 						</h5>
@@ -158,7 +162,10 @@
 				$('#save').click(e => {
                     var data_s = document.getElementById('article-content_s').innerHTML;
 					var data_w = document.getElementById('article-content_w').innerHTML;
-                    result = {index: "{{articleIndex}}", articleType: "{{articleType}}", data_s: data_s, data_w: data_w};
+					var item_name = document.getElementById("itemName").value;
+					var item_store = document.getElementById("itemStore").value;					
+                    result = {index: "{{articleIndex}}", articleType: "{{articleType}}", 
+					data_s: data_s, data_w: data_w, item_name: item_name, item_store: item_store};
 
 					$.ajax({
 					    type: 'POST',
