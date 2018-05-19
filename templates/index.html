@@ -59,29 +59,70 @@
 			    background-color: #4CAF50;
 			    color: white;
 			}
+
 		</style>
 	</head>
 	<body onkeydown="enterGrep()">
 
 		{% include 'navbar.html' %}
 
+		<div  style ='padding-left: 1%; padding-top: 1%; padding-right: 1%'>
+			<div class="card alert-info">
+				<div class="card-body">
+					<form>
+						<h5>
+							<div class="form-group row" >
+								<label class="col-sm-1 col-form-label">
+									標題
+								</label>
+								<div class="col-md-10">
+									<input type="text" readonly class="form-control-plaintext" value="{{articleName}}">
+								</div>
+							</div>
+							<div class="form-group row" >
+								<label  class="col-sm-1 col-form-label">
+									網址
+								</label>
+								<div class="col-md-10">
+									<input type="text" readonly class="form-control-plaintext" value="{{articleLink}}">
+								</div>
+							</div>
+							<div class="form-group row" >
+								<label for='itemName'  class="col-sm-1 col-form-label">
+									商品
+								</label>
+								<div class="col-md-10" id='itemName'>
+									{% if not item_name %}
+										<input type="text" class="form-control" placeholder="請填商品名稱">
+									{% else %}
+										<input type="text" class="form-control" value ="{{item_name}}">
+									{% endif %}
+								</div>
+							</div>
+							<div class="form-group row" >
+								<label for='itemName'  class="col-sm-1 col-form-label">
+									商家
+								</label>
+								<div class="col-md-10" id='itemName'>
+									<input type="text" class="form-control" placeholder="請填商家名稱">
+								</div>
+							</div>
+						</h5>
+					</form>
+				</div>
+			</div>
+		</div>
+
 		<div class="row " style ='padding-left: 1%; padding-top: 1%; padding-right: 1%'>
 			<div class="col-sm-6">
 			  <div class="card bg-light">
 				<div class="card-header">
 					<h5>
-						文字
+						標注區 : 文字
 					</h5>
 				</div>
 				<div class="card-body">
-					<h5 class="card-title" style ='padding-top: 1%;'>
-						{% for i in articleList %}
-							{% if articleIndex ==  i[0] %}
-								<b>{{i[1]}}</b>
-							{% endif %}
-						{% endfor %}
-					</h5>
-				  <p class="card-text" style ='padding-top: 1%;' id="article-content_w"></p>
+				  <p class="card-text" id="article-content_w"></p>
 				</div>
 			  </div>
 			</div>
@@ -89,18 +130,11 @@
 			  <div class="card bg-light">
 				<div class="card-header">
 						<h5>
-							語句
+							標注區 : 語句
 						</h5>
 				</div>
 				<div class="card-body">
-				  <h5 class="card-title" style ='padding-top: 1%;'>
-					{% for i in articleList %}
-						{% if articleIndex ==  i[0] %}
-							<b>{{i[1]}}</b>
-						{% endif %}
-					{% endfor %}
-				  </h5>
-				  <p class="card-text" style ='padding-top: 1%;' id="article-content_s"></p>
+				  <p class="card-text" id="article-content_s"></p>
 				</div>
 			  </div>
 			</div>

@@ -38,9 +38,13 @@ def category(category):
             articleLink = a['link']
             content_s = a['content_s']
             content_w = a['content_w']
+            item_name = a['item_name']
+            item_store = a['item_store']
             break
-    return render_template('index.html', article_s=content_s, article_w =content_w, articleIndex=index, articleName=articleName, 
-    articleLink=articleLink, articleList=articleList, articleType=articleType)
+    return render_template('index.html', article_s=content_s, article_w =content_w, 
+    articleIndex=index, articleName=articleName, articleLink=articleLink, 
+    articleList=articleList, articleType=articleType, 
+    item_name = item_name, item_store = item_store)
 
 @app.route('/save', methods=['POST'])
 def save():
