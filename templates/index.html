@@ -63,52 +63,8 @@
 	</head>
 	<body onkeydown="enterGrep()">
 
-		<nav class="navbar navbar-expand-lg navbar-dark bg-primary ">
-			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#mainNavbar" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-			  <span class="navbar-toggler-icon"></span>
-			</button>
-		  
-			<div class="collapse navbar-collapse" id="mainNavbar">
-			  <ul class="navbar-nav mr-auto">
-				<li class="nav-item active">
-				  <a class="nav-link" href="\">首頁 <span class="sr-only"></span></a>
-				</li>
-				<li class="nav-item dropdown">
-				  <a class="nav-link dropdown-toggle" href="#" id="typeDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-					文章分類
-				  </a>
-				  <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-						<a class="dropdown-item" href="{{ url_for('category', category='tech') }}">數位生活</a>
-						<a class="dropdown-item" href="{{ url_for('category', category='makeup') }}">美妝</a>
-						<a class="dropdown-item" href="{{ url_for('category', category='movie') }}">電影</a>
-						<a class="dropdown-item" href="{{ url_for('category', category='food') }}">食記</a>
-				  </div>
-				</li>
-				<li class="nav-item dropdown">
-					<a class="nav-link dropdown-toggle" href="#" id="docDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-						文章列表
-					</a>
-					<div class="dropdown-menu" id="docDropdownMenu" aria-labelledby="navbarDropdown" name="index">
-						{% for i in articleList %}
-							<a class="dropdown-item" href="?index={{i[0]}}">{{i[1]}}</a>
-						{% endfor %}
-					</div>
-				</li>
-			</div>
-		</nav>
+		{% include 'navbar.html' %}
 
-		<!-- <form class="" action="" method="get">
-			<select class="custom-select my-1 mr-sm-2" id="selectBox", name="index">
-    			{% for a in articleList %}
-                    {% if a[0] == articleIndex %}
-    			        <option value="{{a[0]}}" selected>{{a[1]}}</option>
-                    {% else %}
-    			        <option value="{{a[0]}}">{{a[1]}}</option>
-                    {% endif %}
-    			{% endfor %}
-    		</select>
-		</form> -->
-		
 		<div class="row " style ='padding-left: 1%; padding-top: 1%; padding-right: 1%'>
 			<div class="col-sm-6">
 			  <div class="card bg-light">
