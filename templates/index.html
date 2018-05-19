@@ -97,8 +97,6 @@
 			</div>
 		</nav>
 
-
-
 		<!-- <form class="" action="" method="get">
 			<select class="custom-select my-1 mr-sm-2" id="selectBox", name="index">
     			{% for a in articleList %}
@@ -157,8 +155,7 @@
 			<button class="button" id="save" style="right: 5px;">存檔</button>
 		</p>
 		<script src="http://code.jquery.com/jquery-latest.js"></script>
-		<script src="static/js/sweetalert.modified.min.js"></script>
-		<!-- <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script> -->
+		<script src="{{ url_for('static', filename='js/sweetalert.modified.min.js') }}"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
 		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
 		<script>
@@ -178,7 +175,7 @@
 					    contentType: 'application/json',
 					    data: JSON.stringify(result),
 						dataType: 'json',
-					    url: '/save',
+					    url: '{{ url_for("save") }}',
 					    success: function (e) {
 					        console.log(e);
 					    }
@@ -189,26 +186,6 @@
 						content: "",
 					});
 				});
-				// $('#save').click(e => {
-                //     var data = document.getElementById('article-content').innerHTML;
-                //     result = {index: "{{articleIndex}}", articleType: "{{articleType}}", data: data};
-
-				// 	$.ajax({
-				// 	    type: 'POST',
-				// 	    contentType: 'application/json',
-				// 	    data: JSON.stringify(result),
-				// 		dataType: 'json',
-				// 	    url: '/save',
-				// 	    success: function (e) {
-				// 	        console.log(e);
-				// 	    }
-				// 	});
-				// 	swal({
-				// 		title: 'Save!',
-				// 		text: '大大辛苦了 >////<',
-				// 		content: "",
-				// 	});
-				// });
 
 				$('#grep').click(e => {
 					sel = window.getSelection();
@@ -258,12 +235,6 @@
 					$(mention).trigger('click');
 				});
 			});
-
-            // function includeHTML() {
-            //     var content = '{{article}}';
-            //     $('#article-content').html($('<div />').html(content).text());
-            //     $('#article-content2').html($('<div />').html(content).text());
-            // };
 
             function includeHTML() {
                 var content_s = '{{article_s}}';

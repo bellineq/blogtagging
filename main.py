@@ -16,7 +16,7 @@ app = Flask(__name__)
 def main():
     return render_template('home.html')
 
-@app.route('/<category>', methods=['GET', 'POST'])
+@app.route('/category/<category>', methods=['GET', 'POST'])
 def category(category):
 
     json_file = os.path.join('data', str(category)+'.json')
@@ -46,9 +46,9 @@ def category(category):
 def save():
     try:
         content = request.get_json()
+        articleType = content['articleType']
 
-        json_file = os.path.join('data', str(category)+'.json')  
-        
+        json_file = os.path.join('data', articleType+'.json')  
         with open(json_file, 'r') as f: data = json.load(f)
         for d in data:
             if d['id']==content['index']: 
