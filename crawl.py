@@ -7,6 +7,8 @@ TECH_URL = 'https://www.pixnet.net/blog/articles/category/24/hot/'        # tech
 MAKEUP_URL = 'https://www.pixnet.net/blog/articles/category/23/hot/'        # makeup                
 MOVIE_URL = 'https://www.pixnet.net/blog/articles/category/19/hot/'        # movie
 FOOD_URL = 'https://www.pixnet.net/blog/articles/group/3/hot/'        # food
+ENTERTAIN_URL = 'https://www.pixnet.net/blog/articles/category/31/hot/'
+
 
 contents = []
 article_count = 0
@@ -26,6 +28,8 @@ def get_item_link_list(type):
             list_url = MOVIE_URL   
         elif type == 'food':
             list_url = FOOD_URL
+        elif type == 'entertain':
+            list_url = ENTERTAIN_URL
 
         list_url = list_url + str(i+1)
         list_req = requests.get(list_url)
@@ -95,11 +99,14 @@ def crawler(type):
         with open('data/movie.json','w') as f: json.dump(contents, f)
     elif type == 'food':
         with open('data/food.json','w') as f: json.dump(contents, f)
+    elif type == 'entertain':
+        with open('data/entertain.json','w') as f: json.dump(contents, f)        
     
 
 if __name__ == '__main__':
     ## type: tech; makeup; movie; food
-    crawler('tech')
+    # crawler('tech')
+    crawler('entertain')
     # crawler('makeup')
     # crawler('movie')
     # crawler('food')
