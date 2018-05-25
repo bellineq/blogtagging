@@ -1,13 +1,23 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
 import requests, re, json, string, random
+import sys
 from bs4 import BeautifulSoup
+sys.setrecursionlimit(1500)
 
 HTML_PARSER = "html.parser"
 ROOT_URL = 'https://styleme.pixnet.net' 
-TECH_URL = 'https://www.pixnet.net/blog/articles/category/24/hot/'        # tech
-MAKEUP_URL = 'https://www.pixnet.net/blog/articles/category/23/hot/'        # makeup                
-MOVIE_URL = 'https://www.pixnet.net/blog/articles/category/19/hot/'        # movie
-FOOD_URL = 'https://www.pixnet.net/blog/articles/group/3/hot/'        # food
-ENTERTAIN_URL = 'https://www.pixnet.net/blog/articles/category/31/hot/'
+TECH_URL = 'https://www.pixnet.net/blog/articles/category/24/hot/'        # 數位生活(14 pages)
+MAKEUP_URL = 'https://www.pixnet.net/blog/articles/category/23/hot/'        # 美容彩妝(25 pages)                
+MOVIE_URL = 'https://www.pixnet.net/blog/articles/category/19/hot/'        # 電影評論(6 pages)
+FOOD_URL = 'https://www.pixnet.net/blog/articles/group/3/hot/'        # 美味食記(94 pages)
+ENTERTAIN_URL = 'https://www.pixnet.net/blog/articles/category/31/hot/' #視聽娛樂(9 pages)
+FASHION_URL = 'https://www.pixnet.net/blog/articles/category/22/hot/' #時尚流行(16 pages)
+ARTCRITICS_URL = 'https://www.pixnet.net/blog/articles/category/17/hot/' #藝文評論(3 pages)
+CARS_URL = 'https://www.pixnet.net/blog/articles/category/42/hot/' #汽機車(4 pages)
+
+
+
 
 
 contents = []
@@ -19,7 +29,7 @@ def get_item_link_list(type):
     article_count = 0
     contents.clear()
     links = [] 
-    for i in range(10):
+    for i in range(4):
         if type == 'tech':
             list_url = TECH_URL
         elif type == 'makeup':
@@ -30,6 +40,12 @@ def get_item_link_list(type):
             list_url = FOOD_URL
         elif type == 'entertain':
             list_url = ENTERTAIN_URL
+        elif type == 'fashion':
+            list_url = FASHION_URL
+        elif type == 'cars':
+            list_url = CARS_URL
+        elif type == 'artcritics':
+            list_url = ARTCRITICS_URL            
 
         list_url = list_url + str(i+1)
         list_req = requests.get(list_url)
@@ -100,13 +116,22 @@ def crawler(type):
     elif type == 'food':
         with open('data/food.json','w') as f: json.dump(contents, f)
     elif type == 'entertain':
-        with open('data/entertain.json','w') as f: json.dump(contents, f)        
-    
+        with open('data/entertain.json','w') as f: json.dump(contents, f)
+    elif type == 'fashion':
+        with open('data/fashion.json','w') as f: json.dump(contents, f)        
+    elif type == 'cars':
+        with open('data/cars.json','w') as f: json.dump(contents, f)
+    elif type == 'artcritics':
+        with open('data/artcritics.json','w') as f: json.dump(contents, f)
+           
 
 if __name__ == '__main__':
     ## type: tech; makeup; movie; food
     # crawler('tech')
-    crawler('entertain')
+    # crawler('entertain')
+    # crawler('fashion')
+    crawler('cars')
+    # crawler('artcritics')
     # crawler('makeup')
     # crawler('movie')
     # crawler('food')
