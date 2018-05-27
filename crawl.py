@@ -7,6 +7,7 @@ sys.setrecursionlimit(1500)
 
 HTML_PARSER = "html.parser"
 ROOT_URL = 'https://styleme.pixnet.net' 
+# =====本日熱門=====
 TECH_URL = 'https://www.pixnet.net/blog/articles/category/24/hot/'        # 數位生活(14 pages)
 MAKEUP_URL = 'https://www.pixnet.net/blog/articles/category/23/hot/'        # 美容彩妝(25 pages)                
 MOVIE_URL = 'https://www.pixnet.net/blog/articles/category/19/hot/'        # 電影評論(6 pages)
@@ -16,8 +17,8 @@ FASHION_URL = 'https://www.pixnet.net/blog/articles/category/22/hot/' #時尚流
 ARTCRITICS_URL = 'https://www.pixnet.net/blog/articles/category/17/hot/' #藝文評論(3 pages)
 CARS_URL = 'https://www.pixnet.net/blog/articles/category/42/hot/' #汽機車(4 pages)
 
-
-
+# =====近期熱門=====
+# MOVIE_URL = 'https://www.pixnet.net/blog/articles/category/19/latest/'
 
 
 contents = []
@@ -29,7 +30,7 @@ def get_item_link_list(type):
     article_count = 0
     contents.clear()
     links = [] 
-    for i in range(4):
+    for i in range(6):
         if type == 'tech':
             list_url = TECH_URL
         elif type == 'makeup':
@@ -99,11 +100,14 @@ def parse_item_information(title, link, classname):
                 content_html+='<word id="'+str(l_id)+'-'+str(w_id)+'">'+word+'</word>'
                 word_count += 1
             content_html+='</p>'
-        if word_count >= 500 and word_count <= 3000:
-            index = random.choice(string.ascii_letters)+link.rsplit('/', 1)[1]
-            contents.append({'id':index, 'title':title, 'link':link, 'number': article_count, 'item_name':'', 'item_store':'', 
-            'view_count': article_viewcount, 'content_s':content_html, 'content_w':content_html})
-            article_count += 1
+
+        # without word_count
+        # if word_count >= 500 and word_count <= 3000:
+        index = random.choice(string.ascii_letters)+link.rsplit('/', 1)[1]
+        contents.append({'id':index, 'title':title, 'link':link, 'number': article_count, 'item_name':'', 'item_store':'', 
+        'content_s':content_html, 'content_w':content_html, 'word_count': word_count})
+        article_count += 1
+
 
 def parse_article_viewcount(soup):
     try:
@@ -147,8 +151,8 @@ if __name__ == '__main__':
     # crawler('tech')
     # crawler('entertain')
     # crawler('fashion')
-    crawler('cars')
+    # crawler('cars')
     # crawler('artcritics')
     # crawler('makeup')
-    # crawler('movie')
+    crawler('movie')
     # crawler('food')
