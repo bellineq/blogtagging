@@ -40,10 +40,12 @@ def category(category):
             content_w = a['content_w']
             item_name = a['item_name']
             item_store = a['item_store']
+            view_count = a['view_count']
+            word_count = a['word_count']
             break
     return render_template('index.html', article_s=content_s, article_w =content_w, 
     articleIndex=index, articleName=articleName, articleLink=articleLink, 
-    articleList=articleList, articleType=articleType, 
+    articleList=articleList, articleType=articleType, view_count=view_count, word_count = word_count,
     item_name = item_name, item_store = item_store)
 
 @app.route('/save', methods=['POST'])
