@@ -13,10 +13,10 @@
             文章分類
           </a>
           <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <a class="dropdown-item" href="{{ url_for('category', category='tech') }}">數位生活</a>
-                <a class="dropdown-item" href="{{ url_for('category', category='makeup') }}">美妝</a>
-                <a class="dropdown-item" href="{{ url_for('category', category='movie') }}">電影</a>
-                <a class="dropdown-item" href="{{ url_for('category', category='food') }}">食記</a>
+                <a class="dropdown-item" href="{{ url_for('category', category='all3C') }}">數位生活</a>
+                <a class="dropdown-item" href="{{ url_for('category', category='allentertain') }}">娛樂</a>
+                <a class="dropdown-item" href="{{ url_for('category', category='allfashion') }}">流行</a>
+                <a class="dropdown-item" href="{{ url_for('category', category='food1') }}">食記1</a>
           </div>
         </li>
         {% if articleList %}
