@@ -66,6 +66,18 @@
 
 		{% include 'navbar.html' %}
 
+		<form class="" action="" method="get" style ='padding-left: 1%; padding-top: 1%; padding-right: 1%'>
+			<select class="custom-select my-1 mr-sm-2" id="selectBox" name="index">
+    			{% for a in articleList %}
+                    {% if a[0] == articleIndex %}
+    			        <option value="{{a[0]}}" selected>{{a[1]}}</option>
+                    {% else %}
+    			        <option value="{{a[0]}}">{{a[1]}}</option>
+                    {% endif %}
+    			{% endfor %}
+    		</select>
+		</form>		
+
 		<div  style ='padding-left: 1%; padding-top: 1%; padding-right: 1%'>
 			<div class="card alert-info">
 				<div class="card-body">
