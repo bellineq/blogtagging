@@ -21,6 +21,7 @@ def category(category):
 
     json_file = os.path.join('data', str(category)+'.json')
     articleList = []
+    articleType = category
     with open(json_file, 'r') as f: 
         articles = json.load(f)
         for a in articles: articleList.append([a['id'], a['title']])
@@ -29,8 +30,6 @@ def category(category):
     index = request.args.get('index')
     if not index: 
         index = articles[0]['id']   
-
-    articleType = category
 
     for a in articles:
         if a['id']==index:
@@ -47,6 +46,19 @@ def category(category):
     articleIndex=index, articleName=articleName, articleLink=articleLink, 
     articleList=articleList, articleType=articleType, view_count=view_count, word_count = word_count,
     item_name = item_name, item_store = item_store)
+
+
+@app.route('/articlelist/<category>', methods=['GET', 'POST'])
+def articleList(category):
+
+    json_file = os.path.join('data', str(category)+'.json')
+    articleList = []
+    articleType = category
+    with open(json_file, 'r') as f: 
+        articles = json.load(f)
+        for a in articles: articleList.append([a['id'], a['title']])
+    f.close()
+    return render_template('articleList.html', articleList=articleList, articleType=articleType)
 
 @app.route('/save', methods=['POST'])
 def save():
