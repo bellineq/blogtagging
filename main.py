@@ -56,7 +56,10 @@ def articleList(category):
     articleType = category
     with open(json_file, 'r') as f: 
         articles = json.load(f)
-        for a in articles: articleList.append([a['id'], a['title']])
+        for a in articles: 
+            if 'status' not in a:
+                a['status'] = 'untagged'
+            articleList.append([a['id'], a['title'], a['number'],a['status']])
     f.close()
     return render_template('articleList.html', articleList=articleList, articleType=articleType)
 
