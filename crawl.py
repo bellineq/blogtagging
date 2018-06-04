@@ -115,8 +115,9 @@ def parse_item_information(title, link, classname, type):
         # without word_count
         # if word_count >= 500 and word_count <= 3000:
         index = random.choice(string.ascii_letters)+link.rsplit('/', 1)[1]
-        contents.append({'id':index, 'title':title, 'link':link, 'number': article_count, 'item_name':'', 'item_store':'', 
-        'view_count': article_viewcount, 'content_s':content_html, 'content_w':content_html, 'word_count': word_count})
+        contents.append({'id':index, 'title':title, 'link':link, 'number': article_count, 'item_name':'', 'item_store':'',
+        'status':'untagged', 'view_count': article_viewcount, 'word_count': word_count, 
+        'content_s':content_html, 'content_w':content_html})
         # contents.append({'id':index, 'title':title, 'link':link, 'number': article_count, 'item_name':'', 'item_store':'' 
         # , 'content_s':content_html, 'content_w':content_html, 'word_count': word_count})        
         article_count += 1
@@ -128,9 +129,13 @@ def parse_article_viewcount(soup):
         counter_link = ''
         for _, i in enumerate(source):
             counter_link = 'http://'+str(i).split('//')[1].split("')")[0]
-        counter_response = requests.get(counter_link, auth=('user', 'pass'))
-        counter_text = counter_response.text
-        counter_text = int(counter_response.text.split('text(')[1].split(')')[0])
+        
+        counter_text = 0
+        trial = 0
+        while(counter_text == 0 and trial < 3):
+            counter_response = requests.get(counter_link, auth=('user', 'pass'))
+            counter_text = counter_response.text
+            counter_text = int(counter_response.text.split('text(')[1].split(')')[0])
         return counter_text
 
     except:
