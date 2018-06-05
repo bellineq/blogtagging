@@ -66,6 +66,18 @@
 
 		{% include 'navbar.html' %}
 
+		<form class="" action="" method="get" style ='padding-left: 1%; padding-top: 1%; padding-right: 1%'>
+			<select class="custom-select my-1 mr-sm-2" id="selectBox" name="index">
+    			{% for a in articleList %}
+                    {% if a[0] == articleIndex %}
+    			        <option value="{{a[0]}}" selected>({{a[2]}}) {{a[1]}}</option>
+                    {% else %}
+    			        <option value="{{a[0]}}">({{a[2]}}) {{a[1]}}</option>
+                    {% endif %}
+    			{% endfor %}
+    		</select>
+		</form>		
+
 		<div  style ='padding-left: 1%; padding-top: 1%; padding-right: 1%'>
 			<div class="card alert-info">
 				<div class="card-body">
@@ -102,6 +114,40 @@
 								<div class="col-md-10">
 									<input type="text" readonly class="form-control-plaintext" value="{{view_count}}">
 								</div>
+							</div>
+							<div class="form-group row">
+									<label for='itemName'  class="col-sm-1 col-form-label">
+										狀態  
+									</label>
+									<div class="col-md-10">
+										<select class="form-control" id="selectArticleStatus">
+											{% for i in statusList %}
+												{% if articleStatus == i %}
+													{% if i == 'untagged' %}
+														<option value="{{articleStatus}}" selected>未標注</option>
+													{% elif i == 'tagging' %}
+														<option value="{{articleStatus}}" selected>工作中</option>
+													{% elif i == 'tagged' %}
+														<option value="{{articleStatus}}" selected>已完成</option>
+													{% elif i == 'abandoned' %}
+														<option value="{{articleStatus}}" selected>廢棄文</option>
+													{% endif %}   
+													<!-- <option value="{{articleStatus}}" selected>{{articleStatus}}</option> -->
+												{% else %}
+													{% if i == 'untagged' %}
+														<option value="{{i}}">未標注</option>
+													{% elif i == 'tagging' %}
+														<option value="{{i}}">工作中</option>
+													{% elif i == 'tagged' %}
+														<option value="{{i}}">已完成</option>
+													{% elif i == 'abandoned' %}
+														<option value="{{i}}">廢棄文</option>
+													{% endif %}   
+													<!-- <option value="{{i}}">{{i}}</option> -->
+												{% endif %}
+											{% endfor %}
+										</select>
+									</div>
 							</div>
 							<div class="form-group row" >
 								<label for='itemName'  class="col-sm-1 col-form-label">
@@ -179,10 +225,11 @@
                     var data_s = document.getElementById('article-content_s').innerHTML;
 					var data_w = document.getElementById('article-content_w').innerHTML;
 					var item_name = document.getElementById("itemName").value;
-					var item_store = document.getElementById("itemStore").value;					
+					var item_store = document.getElementById("itemStore").value;
+					var status = document.getElementById("selectArticleStatus").value;	
                     result = {index: "{{articleIndex}}", articleType: "{{articleType}}", 
-					data_s: data_s, data_w: data_w, item_name: item_name, item_store: item_store};
-
+					data_s: data_s, data_w: data_w, item_name: item_name, item_store: item_store,
+					status: status};
 					$.ajax({
 					    type: 'POST',
 					    contentType: 'application/json',
@@ -292,6 +339,7 @@
 				});
 				$('button.swal-button--delete').parent().before('<hr>')
 			}
+
 		</script>
 
 	</body>

@@ -21,16 +21,15 @@ def category(category):
 
     json_file = os.path.join('data', str(category)+'.json')
     articleList = []
+    articleType = category
     with open(json_file, 'r') as f: 
         articles = json.load(f)
-        for a in articles: articleList.append([a['id'], a['title']])
+        for a in articles: articleList.append([a['id'], a['title'], a['number']])
     f.close()
 
     index = request.args.get('index')
     if not index: 
         index = articles[0]['id']   
-
-    articleType = category
 
     for a in articles:
         if a['id']==index:
@@ -42,11 +41,31 @@ def category(category):
             item_store = a['item_store']
             view_count = a['view_count']
             word_count = a['word_count']
+            if 'status' not in a:
+                a['status'] = 'untagged'
+            status = a['status']
             break
-    return render_template('index.html', article_s=content_s, article_w =content_w, 
-    articleIndex=index, articleName=articleName, articleLink=articleLink, 
+    statusList = ['untagged','tagging','tagged','abandoned']
+    return render_template('index.html', article_s=content_s, article_w=content_w, 
+    articleIndex=index, articleName=articleName, articleLink=articleLink,
     articleList=articleList, articleType=articleType, view_count=view_count, word_count = word_count,
-    item_name = item_name, item_store = item_store)
+    item_name = item_name, item_store = item_store, articleStatus = status, statusList=statusList)
+
+
+@app.route('/articlelist/<category>', methods=['GET', 'POST'])
+def articleList(category):
+
+    json_file = os.path.join('data', str(category)+'.json')
+    articleList = []
+    articleType = category
+    with open(json_file, 'r') as f: 
+        articles = json.load(f)
+        for a in articles: 
+            if 'status' not in a:
+                a['status'] = 'untagged'
+            articleList.append([a['id'], a['title'], a['number'], a['status']])
+    f.close()
+    return render_template('articleList.html', articleList=articleList, articleType=articleType)
 
 @app.route('/save', methods=['POST'])
 def save():
@@ -62,6 +81,7 @@ def save():
                 d['content_s'] = content['data_s']
                 d['item_name'] = content['item_name']
                 d['item_store'] = content['item_store']
+                d['status'] = content['status']
         with open(json_file, 'w') as f: json.dump(data, f)
         f.close()
         return jsonify(message='')
@@ -70,5 +90,5 @@ def save():
         return jsonify(message=str(e)), 500
 
 if __name__ == '__main__':
-    app.run(debug=True, host='140.112.90.203', port=5511)
-
+    # app.run(debug=True, host='140.112.90.203', port=5511)
+    app.run(debug=True)
