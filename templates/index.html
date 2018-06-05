@@ -123,9 +123,27 @@
 										<select class="form-control" id="selectArticleStatus">
 											{% for i in statusList %}
 												{% if articleStatus == i %}
-													<option value="{{articleStatus}}" selected>{{articleStatus}}</option>
+													{% if i == 'untagged' %}
+														<option value="{{articleStatus}}" selected>未標注</option>
+													{% elif i == 'tagging' %}
+														<option value="{{articleStatus}}" selected>工作中</option>
+													{% elif i == 'tagged' %}
+														<option value="{{articleStatus}}" selected>已完成</option>
+													{% elif i == 'abandoned' %}
+														<option value="{{articleStatus}}" selected>廢棄文</option>
+													{% endif %}   
+													<!-- <option value="{{articleStatus}}" selected>{{articleStatus}}</option> -->
 												{% else %}
-													<option value="{{i}}">{{i}}</option>
+													{% if i == 'untagged' %}
+														<option value="{{i}}">未標注</option>
+													{% elif i == 'tagging' %}
+														<option value="{{i}}">工作中</option>
+													{% elif i == 'tagged' %}
+														<option value="{{i}}">已完成</option>
+													{% elif i == 'abandoned' %}
+														<option value="{{i}}">廢棄文</option>
+													{% endif %}   
+													<!-- <option value="{{i}}">{{i}}</option> -->
 												{% endif %}
 											{% endfor %}
 										</select>

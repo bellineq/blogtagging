@@ -23,7 +23,17 @@
                 {% for i in articleList %}
                 <tr>
                     <th scope="row">{{i[2]}}</th>
-                    <td>{{i[3]}}</td>
+                    
+                    {% if i[3] == 'untagged' %}
+                        <td >未標註</td>
+                    {% elif i[3] == 'tagging' %}
+                        <td class="table-primary">工作中</td>
+                    {% elif i[3] == 'tagged' %}
+                        <td class="table-success">已完成</td>
+                    {% elif i[3] == 'abandoned' %}
+                        <td class="table-danger">廢棄文</td>
+                    {% endif %}                       
+
                     <td>
                         <a href="{{ url_for('category', category=articleType) }}?index={{i[0]}}">
                             {{i[1]}}
