@@ -7,10 +7,14 @@ from flask import render_template
 from flask import request
 from flask import send_from_directory
 from flask import url_for
+from flask import g
 
 import json, os
 
 app = Flask(__name__)
+SQLITE_DB_PATH = 'user.db'
+SQLITE_DB_SCHEMA = 'schema.sql'
+MEMBER_CSV_PATH = './data/user.csv'
 
 @app.route('/', methods=['GET', 'POST'])
 def main():
@@ -88,6 +92,22 @@ def save():
     except Exception as e:
         # print(f'"/save" failed: {e}')
         return jsonify(message=str(e)), 500
+
+def get_db():
+    db = getattr(g, '_database', None)
+    if db is None:
+        db = g._database = sqlite3.connect(SQLITE_DB_PATH)
+        # Enable foreign key check
+        db.execute("PRAGMA foreign_keys = ON")
+    return db
+
+
+@app.teardown_appcontext
+def close_connection(exception):
+    db = getattr(g, '_database', None)
+    if db is not None:
+        db.close()
+
 
 if __name__ == '__main__':
     # app.run(debug=True, host='140.112.90.203', port=5511)
