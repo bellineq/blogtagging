@@ -143,8 +143,8 @@ def parse_article_viewcount(soup):
             
 
 
-def crawler(type, url, num):
-    get_item_link_list(type, url, num)
+def crawler(type, url):
+    get_item_link_list(type, url)
     print('complete, total', article_count, ' docs get!\n')
     with open('data/'+ type +'.json','w') as f: json.dump(contents, f)
     # if type == 'tech':
