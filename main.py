@@ -59,7 +59,7 @@ def articleList(category):
         for a in articles: 
             if 'status' not in a:
                 a['status'] = 'untagged'
-            articleList.append([a['id'], a['title'], a['number'],a['status']])
+            articleList.append([a['id'], a['title'], a['number'], a['status']])
     f.close()
     return render_template('articleList.html', articleList=articleList, articleType=articleType)
 
@@ -85,5 +85,5 @@ def save():
         return jsonify(message=str(e)), 500
 
 if __name__ == '__main__':
-    app.run(debug=True, host='140.112.90.203', port=5511)
-
+    # app.run(debug=True, host='140.112.90.203', port=5511)
+    app.run()
