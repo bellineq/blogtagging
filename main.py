@@ -24,7 +24,7 @@ def category(category):
     articleType = category
     with open(json_file, 'r') as f: 
         articles = json.load(f)
-        for a in articles: articleList.append([a['id'], a['title']])
+        for a in articles: articleList.append([a['id'], a['title'], a['number']])
     f.close()
 
     index = request.args.get('index')
@@ -41,11 +41,15 @@ def category(category):
             item_store = a['item_store']
             view_count = a['view_count']
             word_count = a['word_count']
+            if 'status' not in a:
+                a['status'] = 'untagged'
+            status = a['status']
             break
-    return render_template('index.html', article_s=content_s, article_w =content_w, 
-    articleIndex=index, articleName=articleName, articleLink=articleLink, 
+    statusList = ['untagged','tagging','tagged','abandoned']
+    return render_template('index.html', article_s=content_s, article_w=content_w, 
+    articleIndex=index, articleName=articleName, articleLink=articleLink,
     articleList=articleList, articleType=articleType, view_count=view_count, word_count = word_count,
-    item_name = item_name, item_store = item_store)
+    item_name = item_name, item_store = item_store, articleStatus = status, statusList=statusList)
 
 
 @app.route('/articlelist/<category>', methods=['GET', 'POST'])
@@ -77,6 +81,7 @@ def save():
                 d['content_s'] = content['data_s']
                 d['item_name'] = content['item_name']
                 d['item_store'] = content['item_store']
+                d['status'] = content['status']
         with open(json_file, 'w') as f: json.dump(data, f)
         f.close()
         return jsonify(message='')
@@ -86,4 +91,4 @@ def save():
 
 if __name__ == '__main__':
     # app.run(debug=True, host='140.112.90.203', port=5511)
-    app.run()
+    app.run(debug=True)
