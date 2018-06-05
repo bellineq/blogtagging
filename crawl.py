@@ -30,18 +30,18 @@ def arg_parse():
     parser = argparse.ArgumentParser()
     parser.add_argument('--url', default='', type=str)
     parser.add_argument('--type', default='', type=str)
-    parser.add_argument('--num', type=int)
+    # parser.add_argument('--num', type=int)
     args = parser.parse_args()
     return args
 
 
-def get_item_link_list(type, url, numpage):
+def get_item_link_list(type, url):
     global article_count
     global contents
     article_count = 0
     contents.clear()
     links = [] 
-    for i in range(numpage):
+    for i in range(100):
         # if type == 'tech':
         #     list_url = TECH_URL
         # elif type == 'makeup':
@@ -167,7 +167,7 @@ def crawler(type, url, num):
 
 if __name__ == '__main__':
     args = arg_parse()
-    crawler(args.type, args.url, args.num)
+    crawler(args.type, args.url)
     ## type: tech; makeup; movie; food
     # crawler('tech')
     # crawler('entertain')
