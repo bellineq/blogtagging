@@ -29,8 +29,11 @@ def updateCat(user, category):
         db.execute(
             'UPDATE user SET category = ?  WHERE username= ? ',
             (category, user)
-        )    
+        )
+
+def example():
+## this is an example showing how to update category list for user 'guest'
+    updateCat('guest', 'all3C,alllife,allfashion,food1,food2')
 
 if  __name__ == '__main__':
-    updateCat('guest', 'all3C,alllife,allfashion,food1,food2')
     view()
