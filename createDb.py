@@ -32,5 +32,5 @@ def updateCat(user, category):
         )    
 
 if  __name__ == '__main__':
-    updateCat('guest', 'all3C, alllife, allfashion, food1, food2')
+    updateCat('guest', 'all3C,alllife,allfashion,food1,food2')
     view()

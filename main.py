@@ -1,16 +1,5 @@
 #!/usr/bin/env python3
 # -*- coding:utf-8 -*-
-
-from flask import Flask
-from flask import jsonify
-from flask import render_template
-from flask import request
-from flask import send_from_directory
-from flask import url_for
-from flask import g
-from flask import redirect
-from flask import session
-
 from flask import (
     Flask, jsonify, render_template, request, send_from_directory, url_for, 
     g, redirect, session, 
@@ -28,8 +17,14 @@ def main():
     return render_template('home.html')
 
 @app.route('/category/<category>', methods=['GET', 'POST'])
-def category(category):
-    json_file = os.path.join('data', str(category)+'.json')
+def category(category, username=None):
+    ##  locate json file
+    if username and category:
+        json_file = os.path.join('userData', str(username), str(category)+'.json')    
+    else:
+        json_file = os.path.join('data', str(category)+'.json')
+
+    ##  collect info for all articles in the category
     articleList = []
     articleType = category
     with open(json_file, 'r') as f: 
@@ -37,6 +32,7 @@ def category(category):
         for a in articles: articleList.append([a['id'], a['title'], a['number']])
     f.close()
 
+    ## collect data for specific article
     index = request.args.get('index')
     if not index: 
         index = articles[0]['id']   
@@ -55,7 +51,10 @@ def category(category):
                 a['status'] = 'untagged'
             status = a['status']
             break
+
+    ##  specify allowed article status        
     statusList = ['untagged','tagging','tagged','abandoned']
+
     return render_template('index.html', article_s=content_s, article_w=content_w, 
     articleIndex=index, articleName=articleName, articleLink=articleLink,
     articleList=articleList, articleType=articleType, view_count=view_count, word_count = word_count,
@@ -64,7 +63,7 @@ def category(category):
 
 @app.route('/articlelist/<category>', methods=['GET', 'POST'])
 def articleList(category):
-
+    ## locate json file
     json_file = os.path.join('data', str(category)+'.json')
     articleList = []
     articleType = category
@@ -136,6 +135,8 @@ def load_logged_in_user():
         g.user = get_db().execute(
             'SELECT * FROM user WHERE id = ?', (user_id,)
         ).fetchone()
+        g.categoryList = g.user[3].replace(" ", "").split(",")
+        g.username = g.user[1]
 
 @app.route('/logout')
 def logout():
