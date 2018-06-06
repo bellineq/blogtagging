@@ -30,18 +30,18 @@ def arg_parse():
     parser = argparse.ArgumentParser()
     parser.add_argument('--url', default='', type=str)
     parser.add_argument('--type', default='', type=str)
-    parser.add_argument('--num', type=int)
+    # parser.add_argument('--num', type=int)
     args = parser.parse_args()
     return args
 
 
-def get_item_link_list(type, url, numpage):
+def get_item_link_list(type, url):
     global article_count
     global contents
     article_count = 0
     contents.clear()
     links = [] 
-    for i in range(numpage):
+    for i in range(100):
         # if type == 'tech':
         #     list_url = TECH_URL
         # elif type == 'makeup':
@@ -115,8 +115,9 @@ def parse_item_information(title, link, classname, type):
         # without word_count
         # if word_count >= 500 and word_count <= 3000:
         index = random.choice(string.ascii_letters)+link.rsplit('/', 1)[1]
-        contents.append({'id':index, 'title':title, 'link':link, 'number': article_count, 'item_name':'', 'item_store':'', 
-        'view_count': article_viewcount, 'content_s':content_html, 'content_w':content_html, 'word_count': word_count})
+        contents.append({'id':index, 'title':title, 'link':link, 'number': article_count, 'item_name':'', 'item_store':'',
+        'status':'untagged', 'view_count': article_viewcount, 'word_count': word_count, 
+        'content_s':content_html, 'content_w':content_html})
         # contents.append({'id':index, 'title':title, 'link':link, 'number': article_count, 'item_name':'', 'item_store':'' 
         # , 'content_s':content_html, 'content_w':content_html, 'word_count': word_count})        
         article_count += 1
@@ -128,9 +129,13 @@ def parse_article_viewcount(soup):
         counter_link = ''
         for _, i in enumerate(source):
             counter_link = 'http://'+str(i).split('//')[1].split("')")[0]
-        counter_response = requests.get(counter_link, auth=('user', 'pass'))
-        counter_text = counter_response.text
-        counter_text = int(counter_response.text.split('text(')[1].split(')')[0])
+        
+        counter_text = 0
+        trial = 0
+        while(counter_text == 0 and trial < 3):
+            counter_response = requests.get(counter_link, auth=('user', 'pass'))
+            counter_text = counter_response.text
+            counter_text = int(counter_response.text.split('text(')[1].split(')')[0])
         return counter_text
 
     except:
@@ -162,7 +167,7 @@ def crawler(type, url, num):
 
 if __name__ == '__main__':
     args = arg_parse()
-    crawler(args.type, args.url, args.num)
+    crawler(args.type, args.url)
     ## type: tech; makeup; movie; food
     # crawler('tech')
     # crawler('entertain')

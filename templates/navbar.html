@@ -13,14 +13,13 @@
             文章分類
           </a>
           <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <a class="dropdown-item" href="{{ url_for('category', category='all3C') }}">數位生活</a>
-                <a class="dropdown-item" href="{{ url_for('category', category='allentertain') }}">娛樂</a>
-                <a class="dropdown-item" href="{{ url_for('category', category='allfashion') }}">流行</a>
-                <a class="dropdown-item" href="{{ url_for('category', category='food1') }}">食記1</a>
+                <a class="dropdown-item" href="{{ url_for('category', category='moviecritics') }}">電影評論</a>
+                <a class="dropdown-item" href="{{ url_for('category', category='beautymakeup') }}">美妝保養</a>
+                <a class="dropdown-item" href="{{ url_for('category', category='food') }}">食記</a>
           </div>
         </li>
-        {% if articleList %}
-        <li class="nav-item dropdown">
+        {% if articleType %}
+        <!-- <li class="nav-item">
             <a class="nav-link dropdown-toggle" href="#" id="docDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 文章列表
             </a>
@@ -29,6 +28,11 @@
                     <a class="dropdown-item" href="?index={{i[0]}}">{{i[1]}}</a>
                 {% endfor %}
             </div>
+        </li> -->
+        <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('articleList', category=articleType) }}"> 
+                文章列表 
+            </span></a>
         </li>
         {% endif %}
     </div>
