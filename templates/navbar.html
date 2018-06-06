@@ -40,7 +40,7 @@
                 </li>
                 {% if articleType %}
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('articleList', category=articleType) }}"> 
+                        <a class="nav-link" href="{{ url_for('articleList', category=articleType, username= g.username) }}"> 
                             文章列表 
                         </a>
                     </li>

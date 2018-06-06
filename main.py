@@ -62,9 +62,14 @@ def category(category, username=None):
 
 
 @app.route('/articlelist/<category>', methods=['GET', 'POST'])
-def articleList(category):
-    ## locate json file
-    json_file = os.path.join('data', str(category)+'.json')
+def articleList(category, username=None):
+    ##  locate json file
+    if username and category:
+        json_file = os.path.join('userData', str(username), str(category)+'.json')    
+    else:
+        json_file = os.path.join('data', str(category)+'.json')
+    
+    ## collect info for all articles in the category
     articleList = []
     articleType = category
     with open(json_file, 'r') as f: 
@@ -74,6 +79,7 @@ def articleList(category):
                 a['status'] = 'untagged'
             articleList.append([a['id'], a['title'], a['number'], a['status']])
     f.close()
+    
     return render_template('articleList.html', articleList=articleList, articleType=articleType)
 
 @app.route('/save', methods=['POST'])
@@ -127,6 +133,7 @@ def login():
 
 @app.before_request
 def load_logged_in_user():
+    ## obtain user info before every request
     user_id = session.get('user_id')
 
     if user_id is None:
@@ -147,8 +154,6 @@ def get_db():
     db = getattr(g, '_database', None)
     if db is None:
         db = g._database = sqlite3.connect(SQLITE_DB_PATH)
-        # Enable foreign key check
-        db.execute("PRAGMA foreign_keys = ON")
     return db
 
 
