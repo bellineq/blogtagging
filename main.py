@@ -98,7 +98,6 @@ def save():
         f.close()
         return jsonify(message='')
     except Exception as e:
-        # print(f'"/save" failed: {e}')
         return jsonify(message=str(e)), 500
 
 @app.route('/login', methods=(['GET', 'POST']))
@@ -124,7 +123,6 @@ def login():
 
         return render_template('login.html', loginError=error)
     except Exception as e:
-        print(f'"/log" failed: {e}')
         return redirect(url_for('main'))
 
 
