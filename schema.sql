@@ -9,7 +9,7 @@ CREATE TABLE user (
 
 CREATE TABLE shelf (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
-  username TEXT UNIQUE NOT NULL,
+  userId INTEGER NOT NULL,
   category TEXT NOT NULL,
-  FOREIGN KEY (username) REFERENCES user(username)
+  FOREIGN KEY (userId) REFERENCES user(id)
 );
