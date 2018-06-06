@@ -8,13 +8,16 @@ from flask import request
 from flask import send_from_directory
 from flask import url_for
 from flask import g
+from flask import redirect
+from flask import session
 
-import json, os
+import json, os, sqlite3
 
 app = Flask(__name__)
 SQLITE_DB_PATH = 'user.db'
 SQLITE_DB_SCHEMA = 'schema.sql'
 MEMBER_CSV_PATH = './data/user.csv'
+app.secret_key = 'd7e977e3b75db569238259291645ceefde9dd89c3c6a5365'
 
 @app.route('/', methods=['GET', 'POST'])
 def main():
@@ -22,7 +25,6 @@ def main():
 
 @app.route('/category/<category>', methods=['GET', 'POST'])
 def category(category):
-
     json_file = os.path.join('data', str(category)+'.json')
     articleList = []
     articleType = category
@@ -92,6 +94,33 @@ def save():
     except Exception as e:
         # print(f'"/save" failed: {e}')
         return jsonify(message=str(e)), 500
+
+@app.route('/login', methods=(['POST']))
+def login():
+    try:
+        username = request.form['username']
+        password = request.form['password']
+        db = get_db()
+        error = None
+        user = db.execute(
+            'SELECT * FROM user WHERE username = ?', (username,)
+        ).fetchone()
+
+        if user is None:
+            error = '帳號或密碼錯誤'
+        elif not user[2] == password:
+            error = '帳號或密碼錯誤'
+
+        if error is None:
+            session.clear()
+            session['user_id'] = user[0]
+            return redirect(url_for('main'))
+
+        return render_template('login.html', loginError=error)
+    except Exception as e:
+        print(f'"/log" failed: {e}')
+        return redirect(url_for('main'))
+
 
 def get_db():
     db = getattr(g, '_database', None)
