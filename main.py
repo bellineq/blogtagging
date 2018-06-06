@@ -99,7 +99,7 @@ def save():
         # print(f'"/save" failed: {e}')
         return jsonify(message=str(e)), 500
 
-@app.route('/login', methods=(['POST']))
+@app.route('/login', methods=(['GET', 'POST']))
 def login():
     try:
         username = request.form['username']
@@ -124,6 +124,7 @@ def login():
     except Exception as e:
         print(f'"/log" failed: {e}')
         return redirect(url_for('main'))
+
 
 @app.before_request
 def load_logged_in_user():

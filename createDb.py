@@ -1,16 +1,36 @@
 import sqlite3
 import csv
 
-with open('./data/user.csv', newline='') as f:
-    csv_reader = csv.DictReader(f)
-    user = [(row['username'], row['password']) for row in csv_reader]
+def create():
+    with open('./data/user.csv', newline='') as f:
+        csv_reader = csv.DictReader(f)
+        user = [(row['username'], row['password'], '') for row in csv_reader]
 
-with open('schema.sql') as f:
-    sql = f.read()
+    with open('schema.sql') as f:
+        sql = f.read()
 
-db = sqlite3.connect('user.db')
-with db:
-    db.executescript(sql)
-    db.executemany(
-        'INSERT INTO  user (username, password) VALUES (?, ?)', user
-    )
+    db = sqlite3.connect('user.db')
+    with db:
+        db.executescript(sql)
+        db.executemany(
+            'INSERT INTO  user (username, password, category) VALUES (?, ?, ?)', user
+        )
+
+def view():
+    db = sqlite3.connect('user.db')
+    with db:
+        data = db.execute('SELECT * FROM user')
+    for row in data:
+        print(row)
+
+def updateCat(user, category):
+    db = sqlite3.connect('user.db')
+    with db:
+        db.execute(
+            'UPDATE user SET category = ?  WHERE username= ? ',
+            (category, user)
+        )    
+
+if  __name__ == '__main__':
+    updateCat('guest', 'all3C, alllife, allfashion, food1, food2')
+    view()
