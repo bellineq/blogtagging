@@ -11,6 +11,10 @@ from flask import g
 from flask import redirect
 from flask import session
 
+from flask import (
+    Flask, jsonify, render_template, request, send_from_directory, url_for, 
+    g, redirect, session, 
+)
 import json, os, sqlite3
 
 app = Flask(__name__)
@@ -121,6 +125,21 @@ def login():
         print(f'"/log" failed: {e}')
         return redirect(url_for('main'))
 
+@app.before_request
+def load_logged_in_user():
+    user_id = session.get('user_id')
+
+    if user_id is None:
+        g.user = None
+    else:
+        g.user = get_db().execute(
+            'SELECT * FROM user WHERE id = ?', (user_id,)
+        ).fetchone()
+
+@app.route('/logout')
+def logout():
+    session.clear()
+    return redirect(url_for('main'))
 
 def get_db():
     db = getattr(g, '_database', None)
