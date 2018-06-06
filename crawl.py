@@ -114,7 +114,7 @@ def parse_item_information(title, link, classname, type):
 
         # without word_count
         # if word_count >= 500 and word_count <= 3000:
-        index = random.choice(string.ascii_letters)+link.rsplit('/', 1)[1]
+        index = random.choice(string.ascii_letters)+link.rsplit('/', 1)[1].split('-')[0]
         contents.append({'id':index, 'title':title, 'link':link, 'number': article_count, 'item_name':'', 'item_store':'',
         'status':'untagged', 'view_count': article_viewcount, 'word_count': word_count, 
         'content_s':content_html, 'content_w':content_html})
