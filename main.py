@@ -17,17 +17,14 @@ def main():
     return render_template('home.html')
 
 @app.route('/category/<category>', methods=['GET', 'POST'])
-def category(category, username=None):
+def category(category):
     ##  locate json file
-    if username and category:
-        json_file = os.path.join('userData', str(username), str(category)+'.json')    
-    else:
-        json_file = os.path.join('data', str(category)+'.json')
+    json_file = getJsonLoc(category)    
 
     ##  collect info for all articles in the category
     articleList = []
     articleType = category
-    with open(json_file, 'r') as f: 
+    with open(json_file, 'r', encoding="utf-8") as f: 
         articles = json.load(f)
         for a in articles: articleList.append([a['id'], a['title'], a['number']])
     f.close()
@@ -62,17 +59,14 @@ def category(category, username=None):
 
 
 @app.route('/articlelist/<category>', methods=['GET', 'POST'])
-def articleList(category, username=None):
+def articleList(category):
     ##  locate json file
-    if username and category:
-        json_file = os.path.join('userData', str(username), str(category)+'.json')    
-    else:
-        json_file = os.path.join('data', str(category)+'.json')
+    json_file = getJsonLoc(category) 
     
     ## collect info for all articles in the category
     articleList = []
     articleType = category
-    with open(json_file, 'r') as f: 
+    with open(json_file, 'r', encoding="utf-8") as f: 
         articles = json.load(f)
         for a in articles: 
             if 'status' not in a:
@@ -85,11 +79,14 @@ def articleList(category, username=None):
 @app.route('/save', methods=['POST'])
 def save():
     try:
+        ## get data from user
         content = request.get_json()
         articleType = content['articleType']
 
-        json_file = os.path.join('data', articleType+'.json')  
-        with open(json_file, 'r') as f: data = json.load(f)
+        ## locate json file
+        json_file = getJsonLoc(articleType) 
+        
+        with open(json_file, 'r', encoding="utf-8") as f: data = json.load(f)
         for d in data:
             if d['id']==content['index']: 
                 d['content_w'] = content['data_w']
@@ -162,6 +159,15 @@ def close_connection(exception):
     db = getattr(g, '_database', None)
     if db is not None:
         db.close()
+
+def getJsonLoc(category):
+    try:
+        if g.username and category:
+            return os.path.join('userData', str(g.username), str(category)+'.json')    
+        else:
+            return os.path.join('data', str(category)+'.json')
+    except:
+        return os.path.join('data', str(category)+'.json')
 
 
 if __name__ == '__main__':

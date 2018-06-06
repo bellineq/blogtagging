@@ -34,13 +34,13 @@
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                         {% for cat in g.categoryList %}
-                            <a class="dropdown-item" href="{{ url_for('category',category=cat, username= g.username) }}">{{cat}}</a>
+                            <a class="dropdown-item" href="{{ url_for('category',category=cat) }}">{{cat}}</a>
                         {% endfor %}
                     </div>
                 </li>
                 {% if articleType %}
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('articleList', category=articleType, username= g.username) }}"> 
+                        <a class="nav-link" href="{{ url_for('articleList', category=articleType) }}"> 
                             文章列表 
                         </a>
                     </li>
