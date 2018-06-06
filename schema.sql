@@ -6,3 +6,10 @@ CREATE TABLE user (
   username TEXT UNIQUE NOT NULL,
   password TEXT NOT NULL
 );
+
+CREATE TABLE shelf (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  username TEXT UNIQUE NOT NULL,
+  category TEXT NOT NULL,
+  FOREIGN KEY (username) REFERENCES user(username)
+);
