@@ -3,7 +3,7 @@ dataList = ['all3C', 'allarts', 'allastrology', 'alldesign', 'allentertain',
 'allfamily', 'allfashion', 'alllearn', 'alllife', 'allmoods', 'allpics',
 'allpolitics', 'allsports', 'alltravel1', 'alltravel2', 'food1', 'food2']
 dataList = ['all3C', 'allfashion', 'alllife','food1','food2']
-# dataList = ['alldesign','beautymakeup','food','moviecritics']
+# dataList = ['beautymakeup','food','moviecritics']
 dataList = ['food','threec','moviecritics']
 user = 'user1'
 
