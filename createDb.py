@@ -36,4 +36,6 @@ def example():
     updateCat('guest', 'all3C,alllife,allfashion,food1,food2')
 
 if  __name__ == '__main__':
+    updateCat('user0', 'beautymakeup,food,moviecritics,alldesign')
     view()
+    
