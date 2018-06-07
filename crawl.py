@@ -35,7 +35,7 @@ def arg_parse():
     return args
 
 
-def get_item_link_list(type, url, nPage):
+def get_item_link_list(url, nPage):
     """
         collect article links for articles list in the url,
         nPage: number of pages to crawl 
@@ -64,15 +64,13 @@ def get_item_link_list(type, url, nPage):
                 articles = soup.find('ol', attrs={'class' : 'article-list'}).find_all('li', attrs={'class' : re.compile("^rank")}) 
             for doc in articles:
                 link = doc.find('a')['href']
-                # link = link.split('post')[0]+'post'+link.split('post')[-1].split('-')[0]
                 title = doc.find('h3').find('a', attrs={'target': '_blank'}).string
 
                 print('title: ', title , '\n')
                 print('link: ', link, '\n')
-                # print('doc: ', doc ,'\n')
 
                 if not any(i['title'] == title for i in links):
-                    parse_item_information(title, link, 'article-content-inner',type)
+                    parse_item_information(title, link, 'article-content-inner')
                     links.append({
                         'title': title,
                         'href': link
@@ -82,10 +80,14 @@ def get_item_link_list(type, url, nPage):
 
 
 
-def parse_item_information(title, link, classname, type):
+def parse_item_information(title, link, classname):
+    '''
+        parse article content
+    '''
     req = requests.get(link)
     if req.status_code == requests.codes.ok:
         soup = BeautifulSoup(req.content, HTML_PARSER)
+        [s.extract() for s in soup('script')]
         content = soup.find('div', attrs={'class': classname})
 
         content = re.sub("<.*?>", " ", str(content))
@@ -103,21 +105,24 @@ def parse_item_information(title, link, classname, type):
                 word_count += 1
             content_html+='</p>'
 
-        ### without word_count
+        ## without word_count
         # if word_count >= 500 and word_count <= 3000:
         
+        ## define article index
         index = random.choice(string.ascii_letters)+link.rsplit('/', 1)[1].split('-')[0]
         
-        contents.append({'id':index, 'title':title, 'link':link, 'number': article_count, 'item_name':'', 'item_store':'',
+        results = {'id':index, 'title':title, 'link':link, 'number': article_count, 'item_name':'', 'item_store':'',
         'status':'untagged', 'view_count': article_viewcount, 'word_count': word_count, 
-        'content_s':content_html, 'content_w':content_html})
-        # contents.append({'id':index, 'title':title, 'link':link, 'number': article_count, 'item_name':'', 'item_store':'' 
-        # , 'content_s':content_html, 'content_w':content_html, 'word_count': word_count})        
-        
+        'content_s':content_html, 'content_w':content_html}
+
+        contents.append(results)       
         article_count += 1
 
 
 def parse_article_viewcount(soup):
+    '''
+        paerse viewcount
+    '''
 
     try:
         source = soup.find('div', attrs={'class' : 'hslice box', 'id' : 'counter'}).find('script')
@@ -141,7 +146,7 @@ def parse_article_viewcount(soup):
 
 
 def crawler(type, url, nPage):
-    get_item_link_list(type, url, nPage)
+    get_item_link_list(url, nPage)
     print('complete, total', article_count, ' docs get!\n')
     with open('data/'+ type +'.json','w') as f: 
         json.dump(contents, f)
@@ -151,4 +156,3 @@ def crawler(type, url, nPage):
 if __name__ == '__main__':
     args = arg_parse()
     crawler(args.type, args.url, args.num)
-
