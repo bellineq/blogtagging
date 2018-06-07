@@ -30,34 +30,25 @@ def arg_parse():
     parser = argparse.ArgumentParser()
     parser.add_argument('--url', default='', type=str)
     parser.add_argument('--type', default='', type=str)
-    # parser.add_argument('--num', type=int)
+    parser.add_argument('--num', type=int)
     args = parser.parse_args()
     return args
 
 
-def get_item_link_list(type, url):
+def get_item_link_list(type, url, nPage):
+    """
+        collect article links for articles list in the url,
+        nPage: number of pages to crawl 
+    """
+
+    ## clear global variables
     global article_count
     global contents
     article_count = 0
     contents.clear()
     links = [] 
-    for i in range(100):
-        # if type == 'tech':
-        #     list_url = TECH_URL
-        # elif type == 'makeup':
-        #     list_url = MAKEUP_URL            
-        # elif type == 'movie':
-        #     list_url = MOVIE_URL   
-        # elif type == 'food':
-        #     list_url = FOOD_URL
-        # elif type == 'entertain':
-        #     list_url = ENTERTAIN_URL
-        # elif type == 'fashion':
-        #     list_url = FASHION_URL
-        # elif type == 'cars':
-        #     list_url = CARS_URL
-        # elif type == 'artcritics':
-        #     list_url = ARTCRITICS_URL            
+
+    for i in range(nPage):     
         list_url = url
         list_url = list_url + str(i+1)
         list_req = requests.get(list_url)
@@ -112,18 +103,22 @@ def parse_item_information(title, link, classname, type):
                 word_count += 1
             content_html+='</p>'
 
-        # without word_count
+        ### without word_count
         # if word_count >= 500 and word_count <= 3000:
+        
         index = random.choice(string.ascii_letters)+link.rsplit('/', 1)[1].split('-')[0]
+        
         contents.append({'id':index, 'title':title, 'link':link, 'number': article_count, 'item_name':'', 'item_store':'',
         'status':'untagged', 'view_count': article_viewcount, 'word_count': word_count, 
         'content_s':content_html, 'content_w':content_html})
         # contents.append({'id':index, 'title':title, 'link':link, 'number': article_count, 'item_name':'', 'item_store':'' 
         # , 'content_s':content_html, 'content_w':content_html, 'word_count': word_count})        
+        
         article_count += 1
 
 
 def parse_article_viewcount(soup):
+
     try:
         source = soup.find('div', attrs={'class' : 'hslice box', 'id' : 'counter'}).find('script')
         counter_link = ''
@@ -132,6 +127,8 @@ def parse_article_viewcount(soup):
         
         counter_text = 0
         trial = 0
+
+        ## Try three times to collect view_count
         while(counter_text == 0 and trial < 3):
             counter_response = requests.get(counter_link, auth=('user', 'pass'))
             counter_text = counter_response.text
@@ -143,37 +140,15 @@ def parse_article_viewcount(soup):
             
 
 
-def crawler(type, url, num):
-    get_item_link_list(type, url, num)
+def crawler(type, url, nPage):
+    get_item_link_list(type, url, nPage)
     print('complete, total', article_count, ' docs get!\n')
-    with open('data/'+ type +'.json','w') as f: json.dump(contents, f)
-    # if type == 'tech':
-    #     with open('data/tech.json','w') as f: json.dump(contents, f)
-    # elif type == 'makeup':
-    #     with open('data/makeup.json','w') as f: json.dump(contents, f)      
-    # elif type == 'movie':
-    #     with open('data/movie.json','w') as f: json.dump(contents, f)
-    # elif type == 'food':
-    #     with open('data/food.json','w') as f: json.dump(contents, f)
-    # elif type == 'entertain':
-    #     with open('data/entertain.json','w') as f: json.dump(contents, f)
-    # elif type == 'fashion':
-    #     with open('data/fashion.json','w') as f: json.dump(contents, f)        
-    # elif type == 'cars':
-    #     with open('data/cars.json','w') as f: json.dump(contents, f)
-    # elif type == 'artcritics':
-    #     with open('data/artcritics.json','w') as f: json.dump(contents, f)
+    with open('data/'+ type +'.json','w') as f: 
+        json.dump(contents, f)
+
            
 
 if __name__ == '__main__':
     args = arg_parse()
-    crawler(args.type, args.url)
-    ## type: tech; makeup; movie; food
-    # crawler('tech')
-    # crawler('entertain')
-    # crawler('fashion')
-    # crawler('cars')
-    # crawler('artcritics')
-    # crawler('makeup')
-    # crawler('movie')
-    # crawler('food')
+    crawler(args.type, args.url, args.num)
+
