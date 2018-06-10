@@ -173,6 +173,18 @@
 									{% endif %}								
 								</div>
 							</div>
+							<div class="form-group row" >
+								<label for='newTitle'  class="col-sm-1 col-form-label">
+									新標題
+								</label>
+								<div class="col-md-10">
+									{% if not new_title or new_title == 'none'%}
+										<input type="text" id='newTitle' class="form-control" placeholder="請為文章寫一個新的標題,盡量包含文章主要重點">
+									{% else %}
+										<input type="text" id='newTitle' class="form-control" value ="{{new_title}}">
+									{% endif %}								
+								</div>
+							</div>
 						</h5>
 					</form>
 				</div>
@@ -184,7 +196,7 @@
 			  <div class="card bg-light">
 				<div class="card-header">
 					<h5>
-						標注區 : 詞彙
+						標注區 : 詞彙 (1:藍, 2:綠, 3:黃, 4:橙, 5:紅)
 					</h5>
 				</div>
 				<div class="card-body">
@@ -196,7 +208,7 @@
 			  <div class="card bg-light">
 				<div class="card-header">
 						<h5>
-							標注區 : 語句
+							標注區 : 語句 (1:藍, 2:綠, 3:黃, 4:橙, 5:紅)
 						</h5>
 				</div>
 				<div class="card-body">
@@ -226,10 +238,11 @@
 					var data_w = document.getElementById('article-content_w').innerHTML;
 					var item_name = document.getElementById("itemName").value;
 					var item_store = document.getElementById("itemStore").value;
-					var status = document.getElementById("selectArticleStatus").value;	
+					var status = document.getElementById("selectArticleStatus").value;
+					var new_title = document.getElementById("newTitle").value;						
                     result = {index: "{{articleIndex}}", articleType: "{{articleType}}", 
 					data_s: data_s, data_w: data_w, item_name: item_name, item_store: item_store,
-					status: status};
+					status: status, new_title: new_title};
 					$.ajax({
 					    type: 'POST',
 					    contentType: 'application/json',

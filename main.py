@@ -47,6 +47,9 @@ def category(category):
             if 'status' not in a:
                 a['status'] = 'untagged'
             status = a['status']
+            if 'new_title' not in a:
+                a['new_title'] = 'none'
+            new_title = a['new_title']
             break
 
     ##  specify allowed article status        
@@ -55,7 +58,8 @@ def category(category):
     return render_template('index.html', article_s=content_s, article_w=content_w, 
     articleIndex=index, articleName=articleName, articleLink=articleLink,
     articleList=articleList, articleType=articleType, view_count=view_count, word_count = word_count,
-    item_name = item_name, item_store = item_store, articleStatus = status, statusList=statusList)
+    item_name=item_name, item_store=item_store, articleStatus=status, statusList=statusList,
+    new_title=new_title)
 
 
 @app.route('/articlelist/<category>', methods=['GET', 'POST'])
@@ -94,6 +98,7 @@ def save():
                 d['item_name'] = content['item_name']
                 d['item_store'] = content['item_store']
                 d['status'] = content['status']
+                d['new_title'] = content['new_title']
         with open(json_file, 'w') as f: json.dump(data, f)
         f.close()
         return jsonify(message='')
@@ -169,5 +174,5 @@ def getJsonLoc(category):
 
 
 if __name__ == '__main__':
-    app.run(debug=True, host='140.112.90.203', port=5789)
-    # app.run(debug=True)
+    # app.run(debug=True, host='140.112.90.203', port=5789)
+    app.run(debug=True)
