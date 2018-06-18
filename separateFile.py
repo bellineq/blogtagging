@@ -18,10 +18,10 @@ def GetData(type_name, sep_num):
     single_length = int(total_length/sep_num)
     return origin, single_length
 
-def SepData(ta_data, single_len, num_file):
+def SepData(ta_data, single_len, type_name, num_file):
     origin_length = len(ta_data)
     for idx in range(num_file):
-        with open('data/'+ type_name+ '_'+ idx+ '.json', 'w') as file:
+        with open('data/'+ type_name+ '_'+ str(idx)+ '.json', 'w') as file:
             if (idx+1)*single_len < origin_length:
                 json.dump(ta_data[idx*single_len: (idx+1)*single_len], file)
             else:
@@ -31,4 +31,4 @@ def SepData(ta_data, single_len, num_file):
 if __name__ == '__main__':
     args = arg_parse()
     target, length = GetData(args.type, args.num)
-    SepData(target, length, args.num)
+    SepData(target, length, args.type, args.num)

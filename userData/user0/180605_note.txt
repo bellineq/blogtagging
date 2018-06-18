@@ -1,4 +1,0 @@
-time: 2018.06.05
-moviecritics : data/moviecritics [0,1,2,4,5]
-food : data/food [0,1,2,4,5]
-beautymakeup: data/beautymakeup [0,1,2,4,5]
