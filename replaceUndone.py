@@ -1,6 +1,6 @@
 from os import listdir
 from os.path import isfile, join
-import json, argparse
+import json, argparse, pdb
 
 # show files in 'done' folder
 # mypath = '/Users/kenkao70508/github_files/mymy/userData/user0'
@@ -17,7 +17,7 @@ def arg_parse():
     return args
 
 def GetListofFiles(username):
-    done_path = '/Users/kenkao70508/github_files/mymy/userData/'+ username +'/done'
+    done_path = '/Users/kenkao70508/github_files/mymy/userData/done'
     check_path = '/Users/kenkao70508/github_files/mymy/userData/'+ username
     done_list = [f for f in listdir(done_path) if f.endswith('.json')]
     check_list = [f for f in listdir(check_path) if f.endswith('.json')]
@@ -27,7 +27,7 @@ def GetDoneData(list_of_files, name):
     global DoneData
     for idx in range(len(list_of_files)):
         filename = list_of_files[idx]
-        with open('./userData/'+name+'/done/'+filename, 'r') as file:
+        with open('./userData/done/'+filename, 'r') as file:
             data = json.load(file)
         DoneData += data
 
@@ -37,12 +37,16 @@ def ReplaceUndoneData(list_of_files, name):
     for name_idx in range(len(list_of_files)):
         with open('./userData/'+ name+ '/' + list_of_files[name_idx] , 'r') as check:
             check_data = json.load(check)
+            replaced_check_data = list(check_data)
+        # pdb.set_trace()
         for idx in range(len(check_data)):
             for idx_j in range(len(DoneData)):
                 if check_data[idx]['link'] == DoneData[idx_j]['link']:
-                    check_data[idx] = DoneData[idx_j]
+                    replaced_check_data.remove(check_data[idx])
+
+
         with open('./userData/'+ name+ '/' + list_of_files[name_idx], 'w') as done_check:
-            json.dump(check_data, done_check)
+            json.dump(replaced_check_data, done_check)
 
 if __name__ == '__main__':
     args = arg_parse()
