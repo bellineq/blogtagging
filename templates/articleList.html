@@ -11,7 +11,13 @@
     <body>
         {% include 'navbar.html' %}
         <div class="card" style ='padding-left: 1%; padding-top: 1%; padding-right: 1%'>
-        <h5 id='completeCount'></h5>
+        <h4  style ='padding-top: 1%; padding-bottom: 1%;'>
+                <span class="badge table-warning" id ='totCount'></span>
+                <span class="badge table-secondary" id ='untaggedCount'></span>
+                <span class="badge table-primary" id ='taggingCount'></span>
+                <span class="badge table-success" id ='taggedCount'></span>
+                <span class="badge table-danger" id ='abandonedCount'></span>
+        </h4>
         <table class='table table-striped'>
             <thead class="thead-dark"> 
                 <tr>
@@ -58,13 +64,28 @@
             });
 
             function count_complete(){
-                var count = 0;
+                var tot = 0;
+                var tagged = 0;
+                var untagged = 0;
+                var tagging = 0;
+                var abandoned = 0;
                 {%for i in articleList %}
-                    {% if i[3] == 'tagged' %}
-                        count+=1
+                    {% if i[3] == 'untagged' %}
+                        untagged += 1
+                    {% elif i[3] == 'tagging' %}
+                        taggin += 1
+                    {% elif i[3] == 'tagged' %}
+                        tagged += 1
+                    {% elif i[3] == 'abandoned' %}
+                        abandoned += 1
                     {% endif %}
+                    tot += 1    
                 {% endfor %}
-                $('#completeCount').text('已完成: '+count);
+                $('#totCount').text('文章數: '+tot);
+                $('#untaggedCount').text('未標註: '+untagged);
+                $('#taggingCount').text('工作中: '+tagging);
+                $('#taggedCount').text('已完成: '+tagged);
+                $('#abandonedCount').text('廢棄文: '+abandoned);
             }
 
         </script>
