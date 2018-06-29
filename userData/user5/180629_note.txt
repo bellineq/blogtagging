@@ -1,0 +1,8 @@
+time: 2018.06.29
+name: 陳冠臻
+
+not done:
+1. moviecritics:
+2. food:
+3. beautymakeup: 
+
