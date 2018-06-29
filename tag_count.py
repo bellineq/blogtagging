@@ -10,8 +10,7 @@ untagged = 0
 args = arg_parse()
 with open(args.file, 'r') as f: data = json.load(f)
 for d in data:
-    for k,v in d.items():
-        if d['status']=='untagged': untagged+=1
-        else: tagged+=1
+    if d['status']=='untagged': untagged+=1
+    else: tagged+=1
 
 print('tagged: {}, untagged: {}'.format(tagged, untagged))
