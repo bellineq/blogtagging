@@ -174,5 +174,5 @@ def getJsonLoc(category):
 
 
 if __name__ == '__main__':
-    # app.run(debug=True, host='140.112.90.203', port=5789)
-    app.run(debug=True)
+    app.run(debug=True, host='140.112.90.203', port=5789)
+    # app.run(debug=True)
