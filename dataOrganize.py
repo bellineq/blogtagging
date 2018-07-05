@@ -16,7 +16,6 @@ def GetArticles(filename):
     # goal: get all names of untagged articles.
     for idx in range(len(file)):
         if file[idx]['status'] == 'untagged':
-            names.   append(file[idx]['title'])
             articles.append(file[idx])
     return articles 
 
@@ -41,12 +40,12 @@ def DeleteArticles(filename, articles):
 
 
 if __name__ == '__main__':
-    args          = arg_parse()
-    filename      = args.file
-    save_filename = args.newfile
-    num_to_update = args.num
-    GetArticles(filename)
-    should_be_delete_articles = SaveArticles(save_filename, num_to_update)
+    args                      = arg_parse()
+    filename                  = args.file
+    save_filename             = args.newfile
+    num_to_update             = args.num
+    all_articles              = GetArticles(filename)
+    should_be_delete_articles = SaveArticles(save_filename, all_articles, num_to_update)
     DeleteArticles(filename, should_be_delete_articles)
 
 

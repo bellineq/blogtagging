@@ -36,6 +36,6 @@ def example():
     updateCat('user0', 'tech_0')
 
 if  __name__ == '__main__':
-    updateCat('user5', 'beautymakeup_3,food_5,moviecritics_5')
+    updateCat('user6', 'food_6,moviecritics_6')
     view()
     
