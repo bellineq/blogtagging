@@ -9,4 +9,5 @@ Thumbs.db
 # appierData
 appierData/dataset/*
 appierData/parsedData/*
-   
+appierData/completedLinks/*
+appierData/newLinks/*   
