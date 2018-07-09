@@ -87,6 +87,7 @@ def parse_item_information(title, link, classname):
     req = requests.get(link)
     if req.status_code == requests.codes.ok:
         soup = BeautifulSoup(req.content, HTML_PARSER)
+        article_viewcount = parse_article_viewcount(soup)
         [s.extract() for s in soup('script')]
         content = soup.find('div', attrs={'class': classname})
 
@@ -96,7 +97,6 @@ def parse_item_information(title, link, classname):
         content = content.replace('\r',';')
         content_html = ''
         word_count = 0
-        article_viewcount = parse_article_viewcount(soup)
         global article_count
         for l_id, line in enumerate(content.split(';')):
             content_html+='<p>'
@@ -121,7 +121,7 @@ def parse_item_information(title, link, classname):
 
 def parse_article_viewcount(soup):
     '''
-        paerse viewcount
+        parse viewcount
     '''
 
     try:
