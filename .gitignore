@@ -1,0 +1,13 @@
+# OS X Files                                                                                                                                                  
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*.lnk
+*~
+
+# appierData
+appierData/dataset/*
+appierData/parsedData/*
+appierData/completedLinks/*
+appierData/newLinks/*   
