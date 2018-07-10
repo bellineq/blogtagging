@@ -48,7 +48,7 @@ def get_item_link_list(category):
     for link, title in data:
         parse_item_information(title, link, 'article-content-inner')
         if article_count%200 == 0:
-            fileNumber = str(article_count/200)
+            fileNumber = str(int(article_count/200))
             with open('parsedData/'+ category+fileNumber+'.json','w') as f: 
                 json.dump(contents, f)    
             contents.clear()
