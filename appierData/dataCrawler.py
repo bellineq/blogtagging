@@ -47,7 +47,11 @@ def get_item_link_list(category):
 
     for link, title in data:
         parse_item_information(title, link, 'article-content-inner')
-
+        if article_count%200 == 0:
+            fileNumber = str(article_count/200)
+            with open('parsedData/'+ category+fileNumber+'.json','w') as f: 
+                json.dump(contents, f)    
+            contents.clear()
 
 
 def parse_item_information(title, link, classname):
@@ -87,6 +91,7 @@ def parse_item_information(title, link, classname):
         article_count += 1
 
 
+
 def parse_article_viewcount(soup):
     '''
         parse viewcount
@@ -115,10 +120,7 @@ def parse_article_viewcount(soup):
 def crawler(category):
     get_item_link_list(category)
     print('complete, total', article_count, ' docs get!\n')
-    with open('parsedData/'+ category+'.json','w') as f: 
-        json.dump(contents, f)
-
-           
+         
 
 if __name__ == '__main__':
     crawler('movie')
