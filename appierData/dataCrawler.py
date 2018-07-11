@@ -92,8 +92,9 @@ def parse_item_information(title, link, classname):
             contents.append(results)       
             article_count += 1
         except:
-            with open('parsedData/'+ category+'_error','w') as f:
+            with open('parsedData/error','w') as csvwriter:
                 csvwriter.writerow('parse link failed, '+ link)
+            csvwriter.close()
             print('parse link failed') 
 
 
