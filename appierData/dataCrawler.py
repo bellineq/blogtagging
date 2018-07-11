@@ -52,6 +52,7 @@ def get_item_link_list(category):
             with open('parsedData/'+ category+fileNumber+'.json','w') as f: 
                 json.dump(contents, f)    
             contents.clear()
+            f.close()
 
 
 def parse_item_information(title, link, classname):
@@ -60,35 +61,42 @@ def parse_item_information(title, link, classname):
     '''
     req = requests.get(link)
     if req.status_code == requests.codes.ok:
-        soup = BeautifulSoup(req.content, HTML_PARSER)
-        article_viewcount = parse_article_viewcount(soup)
-        [s.extract() for s in soup('script')]
-        content = soup.find('div', attrs={'class': classname})
+        try:
+            soup = BeautifulSoup(req.content, HTML_PARSER)
+            article_viewcount = parse_article_viewcount(soup)
+            [s.extract() for s in soup('script')]
+            content = soup.find('div', attrs={'class': classname})
 
-        content = re.sub("<.*?>", " ", str(content))
-        content = content.replace('\n',';')
-        content = content.replace('\xa0','')
-        content = content.replace('\r',';')
-        content_html = ''
-        word_count = 0
-        global article_count
-        for l_id, line in enumerate(content.split(';')):
-            content_html+='<p>'
-            for w_id, word in enumerate(line): 
-                content_html+='<word id="'+str(l_id)+'-'+str(w_id)+'">'+word+'</word>'
-                word_count += 1
-            content_html+='</p>'
+            content = re.sub("<.*?>", " ", str(content))
+            content = content.replace('\n',';')
+            content = content.replace('\xa0','')
+            content = content.replace('\r',';')
+            content_html = ''
+            word_count = 0
+            global article_count
+            for l_id, line in enumerate(content.split(';')):
+                content_html+='<p>'
+                for w_id, word in enumerate(line): 
+                    content_html+='<word id="'+str(l_id)+'-'+str(w_id)+'">'+word+'</word>'
+                    word_count += 1
+                content_html+='</p>'
 
-        
-        ## define article index
-        index = random.choice(string.ascii_letters)+link.rsplit('/', 1)[1].split('-')[0]
-        
-        results = {'id':index, 'title':title, 'link':link, 'number': article_count, 'item_name':'', 'item_store':'',
-        'status':'untagged', 'view_count': article_viewcount, 'word_count': word_count, 
-        'content_s':content_html, 'content_w':content_html}
+            
+            ## define article index
+            index = random.choice(string.ascii_letters)+link.rsplit('/', 1)[1].split('-')[0]
+            
+            results = {'id':index, 'title':title, 'link':link, 'number': article_count, 'item_name':'', 'item_store':'',
+            'status':'untagged', 'view_count': article_viewcount, 'word_count': word_count, 
+            'content_s':content_html, 'content_w':content_html}
 
-        contents.append(results)       
-        article_count += 1
+            contents.append(results)       
+            article_count += 1
+        except:
+            with open('parsedData/'+ category+'_error','w') as f:
+                csvwriter.writerow('parse link failed, '+ link)
+            print('parse link failed') 
+
+
 
 
 
@@ -112,7 +120,7 @@ def parse_article_viewcount(soup):
         return counter_text
 
     except:
-        print('exception')
+        print('parse viewcount failed')
         return 0
             
 
