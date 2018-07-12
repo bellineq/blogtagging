@@ -133,6 +133,6 @@ def crawler(category):
          
 
 if __name__ == '__main__':
-    crawler('movie')
-    crawler('tech')
+#    crawler('movie')
+#    crawler('tech')
     crawler('beauty')
