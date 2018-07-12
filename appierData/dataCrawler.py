@@ -94,7 +94,7 @@ def parse_item_information(title, link, classname):
         except:
             with open('parsedData/error','w') as f:
                 csvwriter = csv.writer(f)
-                csvwriter.writerow('parse link failed, '+ link)
+                csvwriter.writerow(['parse link failed, '+ link])
             f.close()
             print('parse link failed') 
 
