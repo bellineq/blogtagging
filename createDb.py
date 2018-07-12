@@ -36,6 +36,19 @@ def example():
     updateCat('user0', 'tech_0')
 
 if  __name__ == '__main__':
-    updateCat('user6', 'food_6,moviecritics_6')
+    updateCat('user7', '3c_7, beauty_7')
+    updateCat('user8', '3c_8, moviecritics_8')
+    updateCat('user9', 'moviecritics_9')
+    updateCat('user10', '3c_10, moviecritics_10')
+    updateCat('user11', 'beauty_11')
+    updateCat('user12', 'beauty_12')
+    updateCat('user13', '3c_13, beauty_13, moviecritics_13')
+    updateCat('user14', 'beauty_14, moviecritics_14')
+    updateCat('user15', '3c_15, beauty_15, moviecritics_15')
+    updateCat('user16', 'beauty_16')
+    updateCat('user17', 'moviecritics_17')
+    updateCat('user18', 'beauty_18, moviecritics_18')
+    updateCat('user19', 'beauty_19, moviecritics_19')
+    updateCat('user20', '3c_20, beauty_20, moviecritics_20')
     view()
     
