@@ -55,13 +55,13 @@ if args.alluser:
 			w = csv.writer(f)
 			w.writerows(workcsv)
 elif args.count:
-	files = os.listdir(os.path.join(os.getcwd(), 'userData/done/first_stage'))
+	done_path = '../blogtagging_done/first_stage/'
+	files = os.listdir(os.path.join(os.getcwd(), done_path))
 	abd_csv = [['category','average_chars_per_abandoned_article','average_chars_per_tagged_article','abandoned_ratio']]
 	for filename in files:
 		print(filename)
-		csv_w = [['title','five','four','three','two','one']]
-		csv_s = [['title','five','four','three','two','one']]
-		with open('userData/done/first_stage/'+filename, 'r') as f: data = json.load(f)
+		csv = [['title','sentence_five','sentence_four','sentence_three','sentence_two','sentence_one','word_five','word_four','word_three','word_two','word_one']]
+		with open(done_path+filename, 'r') as f: data = json.load(f)
 		tagged_words = 0
 		tagged_n = 0
 		abandoned_words = 0
@@ -70,6 +70,7 @@ elif args.count:
 			if d['status']=='tagged':
 				tagged_words+=word_count(d['content_w'])
 				tagged_n+=1
+				csv.append(csv_count(d))
 				csv_w.append(csv_count(d, 'content_w'))
 				csv_s.append(csv_count(d, 'content_s'))
 			elif d['status']=='abandoned':
