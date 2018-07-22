@@ -36,10 +36,9 @@ def csv_write(data, filename):
 args = arg_parse()
 if args.alluser:
 	workcsv = [['user','goal','tagging','tagged','left']]
-	users = os.listdir(os.path.join(os.getcwd(), 'userData/'))
-	for user in users:
-		if not user.startswith('user'): continue
-		total = 0
+	for i in range(args.n_user+1):
+		user = 'user'+str(i)
+		goal = 50
 		progress = 0
 		done = 0
 		#abandoned = 0
@@ -47,12 +46,11 @@ if args.alluser:
 		for filename in files:
 			if not filename.endswith('.json'): continue
 			with open('userData/'+user+'/'+filename, 'r',encoding='utf8') as f: data = json.load(f)
-			total+=len(data)
 			for d in data:
 				if d['status']=='tagged': done+=1
 				elif d['status']=='tagging': progress+=1 
 				#elif d['status']=='abandoned': abandoned+=1
-		workcsv.append([user,total,progress,done,total-done])
+		workcsv.append([user,goal,progress,done,goal-done])
 		with open('alluser_status.csv', 'w', encoding='utf8') as f:
 			w = csv.writer(f)
 			w.writerows(workcsv)
