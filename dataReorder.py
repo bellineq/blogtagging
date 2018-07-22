@@ -73,12 +73,13 @@ elif args.count:
 		abandoned_n = 0
 		
 		for d in data:
-			print(d['id'],d['status'])
+			print(d['id'], d['status'])
 			if d['status']=='tagged':
 				tagged_w+=tag_count(d['content_w'])
 				tagged_s+=tag_count(d['content_s'])
 				tagged_n+=1
-				csv.append(csv_count(d))
+				c = csv_count(d)
+				csv.append(c)
 			elif d['status']=='abandoned':
 				abandoned_words+=count(d['content_w'])
 				abandoned_n+=1
