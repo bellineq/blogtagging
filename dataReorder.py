@@ -98,9 +98,9 @@ elif args.organize:
 			if not userf.endswith('.json'): continue
 			print('user{}/{}'.format(i,userf))
 			with open(user_path+userf,'r',encoding='utf8') as f: userData = json.load(f)
-			with open(done_path+category(userf)+'.json','r') as f: doneData = json.load(f)
+			with open(done_path+category(userf)+'.json','r',encoding='utf8') as f: doneData = json.load(f)
 			for d in userData:
 				if d['status']!='tagged': continue 
 				d['annotator'] = args.user
 				doneData.append(d)
-			with open(done_path+category(userf)+'.json', 'w') as f: json.dump(data,f)
+			with open(done_path+category(userf)+'.json', 'w') as f: json.dump(doneData,f)
