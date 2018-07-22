@@ -16,17 +16,20 @@ def category(filename):
 	elif 'tech' in filename: return 'tech'
 	elif 'food' in filename: return 'food'
 
-def csv_count(d, tag):
-	count = [0,0,0,0,0,0]
-	#root = ET.fromstring(d[tag])	
-	soup = BeautifulSoup(d[tag], "html.parser")
-	for mention in soup.find_all('mention'):
-		#print(mention['score'])
-		count[int(mention['score'])]+=1
-	return [d['title'], count[5], count[4], count[3], count[2], count[1]]	
-def word_count(article):
+def csv_count(d):
+	result = [d['title']]
+	for tag in ['content_w','content_s']:
+		count = [0,0,0,0,0,0]
+		#root = ET.fromstring(d[tag])	
+		soup = BeautifulSoup(d[tag], "html.parser")
+		for mention in soup.find_all('mention'):
+			#print(mention['score'])
+			count[int(mention['score'])]+=1
+		for i in range(5,0,-1): result.append(count[i])
+	return result
+def tag_count(article):
 	soup = BeautifulSoup(article, "html.parser")
-	return len(soup.find_all('word'))
+	return len(soup.find_all('mention'))
 def csv_write(data, filename):
 	with open(filename, 'w', encoding='utf8') as f:
 		w = csv.writer(f)
@@ -58,28 +61,32 @@ elif args.count:
 	done_path = '../blogtagging_done/first_stage/'
 	files = os.listdir(os.path.join(os.getcwd(), done_path))
 	abd_csv = [['category','average_chars_per_abandoned_article','average_chars_per_tagged_article','abandoned_ratio']]
+	total_csv = [['category','done_articles','tagged_sentences','sentence_five','sentence_four','sentence_three','sentence_two','sentence_one','tagged_words','word_five','word_four','word_three','word_two','word_one']]
 	for filename in files:
 		print(filename)
 		csv = [['title','sentence_five','sentence_four','sentence_three','sentence_two','sentence_one','word_five','word_four','word_three','word_two','word_one']]
 		with open(done_path+filename, 'r') as f: data = json.load(f)
-		tagged_words = 0
+		tagged_w = 0
+		tagged_s = 0
 		tagged_n = 0
 		abandoned_words = 0
 		abandoned_n = 0
+		
 		for d in data:
+			print(d['id'],d['status'])
 			if d['status']=='tagged':
-				tagged_words+=word_count(d['content_w'])
+				tagged_w+=tag_count(d['content_w'])
+				tagged_s+=tag_count(d['content_s'])
 				tagged_n+=1
 				csv.append(csv_count(d))
-				csv_w.append(csv_count(d, 'content_w'))
-				csv_s.append(csv_count(d, 'content_s'))
 			elif d['status']=='abandoned':
-				abandoned_words+=word_count(d['content_w'])
+				abandoned_words+=count(d['content_w'])
 				abandoned_n+=1
+		total_csv.append([category(filename), tagged_n, tagged_s, ])
 		abd_csv.append([category(filename), abandoned_words/abandoned_n, tagged_words/tagged_n, abandoned_n/len(data)])
-		csv_write(csv_s, category(filename)+'_done_sentence_gereralInfo.csv')
-		csv_write(csv_w, category(filename)+'_done_word_gereralInfo.csv')
+		csv_write(csv, category(filename)+'_done_gereralInfo.csv')
 	csv_write(abd_csv, 'abandoned_analysis.csv')
+	csv_write(total_csv, 'total_analysis.csv')
 elif args.organize:
 	done_path = '../blogtagging_done/first_stage/'
 
