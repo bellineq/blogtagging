@@ -5,6 +5,7 @@ from bs4 import BeautifulSoup
 def arg_parse():
 	parser = argparse.ArgumentParser()
 	parser.add_argument('--user', default='user0', type=str, help='select user')
+	parser.add_argument('--n_user', default=1, type=int, help='select user')
 	parser.add_argument('--organize', action='store_true',help='')
 	parser.add_argument('--count', action='store_true',help='')
 	parser.add_argument('--alluser', action='store_true',help='')
@@ -80,18 +81,19 @@ elif args.count:
 		csv_write(csv_s, category(filename)+'_done_sentence_gereralInfo.csv')
 		csv_write(csv_w, category(filename)+'_done_word_gereralInfo.csv')
 	csv_write(abd_csv, 'abandoned_analysis.csv')
-else:
-	files = os.listdir(os.path.join(os.getcwd(), 'userData/'+args.user))
-	done_path = 'userData/done/first_stage/'
+elif args.organize:
+	done_path = '../blogtagging_done/first_stage/'
 
-	for filename in files:
-		if not filename.endswith('.json'): continue
-		print(filename)
-		with open('userData'+'/'+args.user+'/'+filename, 'r') as f: userData = json.load(f)
-		if args.organize:
-			print(done_path+category(filename)+'.json')
-			with open(done_path+category(filename)+'.json', 'r') as f: data = json.load(f)
-			for d in userData: 
+	for i in range(args.n_user+1):
+		user_path = 'userData/user'+str(i)+'/'
+		user_files = os.listdir(os.path.join(os.getcwd(), user_path))
+		for userf in user_files:
+			if not userf.endswith('.json'): continue
+			print('user{}/{}'.format(i,userf))
+			with open(user_path+userf,'r',encoding='utf8') as f: userData = json.load(f)
+			with open(done_path+category(userf)+'.json','r') as f: doneData = json.load(f)
+			for d in userData:
+				if d['status']!='tagged': continue 
 				d['annotator'] = args.user
-				data.append(d)
-			with open(done_path+category(filename)+'.json', 'w') as f: json.dump(data,f)
+				doneData.append(d)
+			with open(done_path+category(userf)+'.json', 'w') as f: json.dump(data,f)
